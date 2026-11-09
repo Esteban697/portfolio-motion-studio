@@ -62,10 +62,11 @@ preview with the same readable errors instead of rendering a broken video.
 
 ## Phase 3 status
 
-In progress. The animated timeline and architecture-diagram scenes are
-implemented, schema-validated and demonstrated in the 82 s overview. Remaining:
-image showcase, data-flow scene, and the career-journey / project-showcase
-compositions (which need the owner's real project material and recordings).
+The reusable scene set is complete: intro, statement, animated timeline,
+architecture diagram, image showcase, data flow and outro — all demonstrated
+in the 82 s overview. Remaining: the career-journey and project-showcase
+compositions, which need the owner's real career facts, project material and
+recordings.
 
 ## Recording guidance
 

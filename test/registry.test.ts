@@ -3,6 +3,8 @@ import {describe, expect, it} from 'vitest';
 import overviewManifest from '../projects/studio-overview/manifest.json';
 import manifest from '../projects/studio-sample/manifest.json';
 import {ArchitectureDiagram} from '../src/components/diagram/ArchitectureDiagram';
+import {DataFlow} from '../src/components/flow/DataFlow';
+import {ImageShowcase} from '../src/components/showcase/ImageShowcase';
 import {AnimatedTimeline} from '../src/components/timeline/AnimatedTimeline';
 import {CinematicIntro} from '../src/components/CinematicIntro';
 import {CinematicOutro} from '../src/components/CinematicOutro';
@@ -23,7 +25,9 @@ describe('scene registry', () => {
   });
 
   it('renders each sample scene with the component for its type', () => {
-    const elements = project.scenes.map((scene) => renderScene(scene, project.brand));
+    const elements = project.scenes.map((scene) =>
+      renderScene(scene, project.brand, project.projectId),
+    );
 
     expect(elements.map((element) => element.type)).toEqual([
       CinematicIntro,
@@ -32,27 +36,32 @@ describe('scene registry', () => {
     ]);
   });
 
-  it('renders the overview sample, including timeline and diagram scenes', () => {
-    const elements = overview.scenes.map((scene) => renderScene(scene, overview.brand));
+  it('renders the overview sample, including every scene type', () => {
+    const elements = overview.scenes.map((scene) =>
+      renderScene(scene, overview.brand, overview.projectId),
+    );
     const types = elements.map((element) => element.type);
 
     expect(types[0]).toBe(CinematicIntro);
     expect(types[types.length - 1]).toBe(CinematicOutro);
     expect(types).toContain(AnimatedTimeline);
     expect(types).toContain(ArchitectureDiagram);
-    expect(types).toContain(TitleStatement);
+    expect(types).toContain(ImageShowcase);
+    expect(types).toContain(DataFlow);
   });
 
-  it('passes the project brand and scene content through', () => {
+  it('passes the project brand, content and id through', () => {
     const scene = project.scenes[0];
     if (!scene) throw new Error('fixture has no scenes');
 
-    const element = renderScene(scene, project.brand) as ReactElement<{
+    const element = renderScene(scene, project.brand, project.projectId) as ReactElement<{
       brand: unknown;
       content: unknown;
+      projectId: unknown;
     }>;
 
     expect(element.props.brand).toEqual(project.brand);
     expect(element.props.content).toEqual(scene.content);
+    expect(element.props.projectId).toBe(project.projectId);
   });
 });

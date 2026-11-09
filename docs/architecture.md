@@ -141,14 +141,23 @@ Components consume tokens; they never hardcode color or size literals.
 | `title-statement` | `TitleStatement` | index, label, statement lines, footnote, ghostNumeral |
 | `animated-timeline` | `AnimatedTimeline` | index, label, chapter, headline, 2–6 milestones, footnote |
 | `architecture-diagram` | `ArchitectureDiagram` | index, label, chapter, headline, nodes + edges, footnote |
+| `image-showcase` | `ImageShowcase` | index, label, chapter, headline, 1–3 images (src, caption, kind), footnote |
+| `data-flow` | `DataFlow` | index, label, chapter, headline, 2–4 stages, footnote |
 | `cinematic-outro` | `CinematicOutro` | kicker, closingLine |
 
 Layout math for the timeline and diagram lives in pure, tested modules
 (`components/timeline/layout.ts`, `components/diagram/layout.ts`), so
-placement and edge routing are verified without rendering. The diagram's
-column/row grid is intentionally small: columns 0–3, rows 0–2, at most eight
-nodes. That constraint is enforced by the schema and keeps diagrams legible at
-1080p.
+placement and edge routing are verified without rendering. The data flow uses
+its own tested spacing module (`components/flow/layout.ts`).
+
+The diagram's column/row grid is intentionally small: columns 0–3, rows 0–2,
+at most eight nodes. That constraint is enforced by the schema and keeps
+diagrams legible at 1080p.
+
+Image showcase distinguishes **captures** from **concepts**: every image
+declares `kind`, captures get a browser frame, concepts get a cyan CONCEPT
+badge. A concept can never be presented as a screenshot. The asset generator
+verifies image files exist and registers them alongside narration.
 
 ## Sample structure
 
@@ -166,10 +175,11 @@ sufficient.
 Each scene is self-contained and reads only props, so it can be reused by any
 composition.
 
-`StudioOverview` is the acceptance sample: eight scenes, 82 s, covering every
-implemented scene type with varied transitions and narration. Adding a scene
-type required a schema member, a component, a registry entry and a layout
-test — no changes to the composition or manifest machinery.
+`StudioOverview` is the acceptance sample: eight scenes, 82 s, covering all
+seven implemented scene types with varied transitions and narration (the
+statement type appears twice). Adding a scene type required a schema member, a
+component, a registry entry and a layout test — no changes to the composition
+or manifest machinery.
 
 ## Decisions and their reasons
 

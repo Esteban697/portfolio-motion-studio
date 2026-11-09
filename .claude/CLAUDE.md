@@ -45,13 +45,13 @@ npm run still:sample           # poster frame
 
 ## Status
 
-Phase 2 complete. Phase 3 in progress: animated-timeline and
-architecture-diagram scenes are implemented with pure layout modules
-(`components/timeline/layout.ts`, `components/diagram/layout.ts`), schema
-rules, registry entries and tests (92 total), and both appear in the 82 s
-studio-overview sample. Remaining Phase 3: image showcase, data-flow scene,
-career-journey and project-showcase compositions. Do not jump ahead to the
-Claude Code production skills (Phase 4) or social formats (Phase 5).
+Phase 2 complete. Phase 3 in progress: all seven scene types are implemented
+(intro, statement, animated timeline, architecture diagram, image showcase,
+data flow, outro) with pure layout modules, schema rules, registry entries and
+107 tests, and all appear in the 82 s studio-overview sample. Remaining:
+career-journey and project-showcase compositions, which need real user
+material. Do not jump ahead to the Claude Code production skills (Phase 4) or
+social formats (Phase 5).
 
 ## Remotion license
 

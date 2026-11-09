@@ -120,38 +120,43 @@
     },
     {
       "id": "assets",
-      "type": "title-statement",
+      "type": "image-showcase",
       "durationSeconds": 10,
       "voiceover": { "src": "assets/voice/scene-05-assets.wav" },
       "transitionOut": "camera-push",
       "content": {
         "index": "06",
         "label": "Your assets",
-        "lines": [
-          { "text": "Your voice." },
-          { "text": "Your screenshots." },
-          { "text": "Your machine.", "accent": true }
+        "chapter": "Project assets",
+        "headline": "Your files stay yours.",
+        "images": [
+          {
+            "src": "assets/images/workspace-placeholder.svg",
+            "caption": "Studio workspace — placeholder, replace with a real screenshot",
+            "kind": "concept"
+          }
         ],
-        "footnote": "Nothing is uploaded. Originals are never modified.",
-        "ghostNumeral": "06"
+        "footnote": "Nothing is uploaded. Originals are never modified."
       }
     },
     {
       "id": "result",
-      "type": "title-statement",
+      "type": "data-flow",
       "durationSeconds": 10,
       "voiceover": { "src": "assets/voice/scene-06-result.wav" },
       "transitionOut": "fade",
       "content": {
         "index": "07",
         "label": "The result",
-        "lines": [
-          { "text": "Same inputs." },
-          { "text": "Same frames." },
-          { "text": "Every time.", "accent": true }
+        "chapter": "Data flow",
+        "headline": "Same inputs, same frames.",
+        "stages": [
+          { "id": "manifest", "label": "Manifest", "sublabel": "Validated JSON" },
+          { "id": "assets", "label": "Assets", "sublabel": "Voice · images" },
+          { "id": "registry", "label": "Registry", "sublabel": "Type → component" },
+          { "id": "render", "label": "Render", "sublabel": "Local MP4" }
         ],
-        "footnote": "A render you can repeat, review and trust.",
-        "ghostNumeral": "07"
+        "footnote": "A render you can repeat, review and trust."
       }
     },
     {

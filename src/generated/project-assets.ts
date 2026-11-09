@@ -7,11 +7,12 @@ import asset2 from '../../projects/studio-overview/assets/voice/scene-03-princip
 import asset3 from '../../projects/studio-overview/assets/voice/scene-04-pipeline.wav';
 import asset4 from '../../projects/studio-overview/assets/voice/scene-04b-architecture.wav';
 import asset5 from '../../projects/studio-overview/assets/voice/scene-05-assets.wav';
-import asset6 from '../../projects/studio-overview/assets/voice/scene-06-result.wav';
-import asset7 from '../../projects/studio-overview/assets/voice/scene-07-outro.wav';
-import asset8 from '../../projects/studio-sample/assets/voice/scene-01-intro.wav';
-import asset9 from '../../projects/studio-sample/assets/voice/scene-02-principle.wav';
-import asset10 from '../../projects/studio-sample/assets/voice/scene-03-outro.wav';
+import asset6 from '../../projects/studio-overview/assets/images/workspace-placeholder.svg';
+import asset7 from '../../projects/studio-overview/assets/voice/scene-06-result.wav';
+import asset8 from '../../projects/studio-overview/assets/voice/scene-07-outro.wav';
+import asset9 from '../../projects/studio-sample/assets/voice/scene-01-intro.wav';
+import asset10 from '../../projects/studio-sample/assets/voice/scene-02-principle.wav';
+import asset11 from '../../projects/studio-sample/assets/voice/scene-03-outro.wav';
 
 export const projectAssets: Record<string, Record<string, string>> = {
   'studio-overview': {
@@ -21,12 +22,13 @@ export const projectAssets: Record<string, Record<string, string>> = {
     'assets/voice/scene-04-pipeline.wav': asset3,
     'assets/voice/scene-04b-architecture.wav': asset4,
     'assets/voice/scene-05-assets.wav': asset5,
-    'assets/voice/scene-06-result.wav': asset6,
-    'assets/voice/scene-07-outro.wav': asset7,
+    'assets/images/workspace-placeholder.svg': asset6,
+    'assets/voice/scene-06-result.wav': asset7,
+    'assets/voice/scene-07-outro.wav': asset8,
   },
   'studio-sample': {
-    'assets/voice/scene-01-intro.wav': asset8,
-    'assets/voice/scene-02-principle.wav': asset9,
-    'assets/voice/scene-03-outro.wav': asset10,
+    'assets/voice/scene-01-intro.wav': asset9,
+    'assets/voice/scene-02-principle.wav': asset10,
+    'assets/voice/scene-03-outro.wav': asset11,
   },
 };

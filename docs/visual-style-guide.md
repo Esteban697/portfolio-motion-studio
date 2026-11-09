@@ -85,6 +85,25 @@ not read.
 - If a diagram illustrates a concept rather than a real system, say so in the
   scene copy or footnote.
 
+**Image showcase**
+
+- A real screenshot gets browser chrome and a muted CAPTURE badge; a
+  conceptual illustration gets a cyan CONCEPT badge. Never dress a concept as
+  a screenshot.
+- One hero frame plus up to two detail frames. Captions are mandatory and
+  describe what the viewer is looking at, not what to conclude.
+- Keep screenshots at their native aspect; the frame letterboxes rather than
+  crops.
+
+**Data flow**
+
+- Strictly linear, 2–4 stages, equal widths. It is a sequence, not a graph —
+  use the architecture diagram when the system branches.
+- Cyan marks the output stage and the travelling packets; everything else is
+  silver on dark.
+- Packets are small and sparse. If they start reading as decoration, remove
+  one.
+
 ## Transitions
 
 | Name | Use |

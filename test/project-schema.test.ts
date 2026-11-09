@@ -3,9 +3,12 @@ import manifest from '../projects/studio-sample/manifest.json';
 import {
   animatedTimelineContentSchema,
   architectureDiagramContentSchema,
+  dataFlowContentSchema,
   formatIssues,
+  imageShowcaseContentSchema,
   parseProjectManifest,
   projectManifestSchema,
+  showcaseImageSchema,
   supportedSceneTypes,
 } from '../src/schemas/project-schema';
 
@@ -67,6 +70,8 @@ describe('project manifest schema', () => {
       'title-statement',
       'animated-timeline',
       'architecture-diagram',
+      'image-showcase',
+      'data-flow',
       'cinematic-outro',
     ]);
   });
@@ -320,5 +325,107 @@ describe('architecture diagram content', () => {
     });
 
     expect(result.success).toBe(false);
+  });
+});
+
+const showcaseContent = {
+  index: '06',
+  label: 'Your assets',
+  chapter: 'Project assets',
+  headline: 'Your files stay yours.',
+  images: [
+    {
+      src: 'assets/images/workspace-placeholder.svg',
+      caption: 'Studio workspace',
+      kind: 'concept',
+    },
+  ],
+};
+
+const flowContent = {
+  index: '07',
+  label: 'The result',
+  chapter: 'Data flow',
+  headline: 'Same inputs, same frames.',
+  stages: [
+    {id: 'manifest', label: 'Manifest'},
+    {id: 'render', label: 'Render'},
+  ],
+};
+
+describe('image showcase content', () => {
+  it('accepts a showcase with a conceptual image', () => {
+    expect(imageShowcaseContentSchema.safeParse(showcaseContent).success).toBe(true);
+  });
+
+  it('defaults image kind to capture', () => {
+    const result = imageShowcaseContentSchema.safeParse({
+      ...showcaseContent,
+      images: [{src: 'assets/images/a.png', caption: 'A screenshot'}],
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.images[0]?.kind).toBe('capture');
+    }
+  });
+
+  it('rejects more than three images', () => {
+    const images = Array.from({length: 4}, (_, index) => ({
+      src: `assets/images/${index}.png`,
+      caption: `Image ${index}`,
+    }));
+
+    expect(imageShowcaseContentSchema.safeParse({...showcaseContent, images}).success).toBe(false);
+  });
+
+  it('rejects paths that escape the project directory', () => {
+    expect(showcaseImageSchema.safeParse({src: '../secret.png', caption: 'x'}).success).toBe(false);
+    expect(showcaseImageSchema.safeParse({src: '/absolute.png', caption: 'x'}).success).toBe(false);
+    expect(showcaseImageSchema.safeParse({src: 'https://x.dev/a.png', caption: 'x'}).success).toBe(
+      false,
+    );
+  });
+
+  it('requires a caption on every image', () => {
+    expect(showcaseImageSchema.safeParse({src: 'assets/images/a.png'}).success).toBe(false);
+  });
+});
+
+describe('data flow content', () => {
+  it('accepts a linear flow', () => {
+    expect(dataFlowContentSchema.safeParse(flowContent).success).toBe(true);
+  });
+
+  it('rejects fewer than two stages', () => {
+    expect(
+      dataFlowContentSchema.safeParse({...flowContent, stages: [flowContent.stages[0]]}).success,
+    ).toBe(false);
+  });
+
+  it('rejects more than four stages', () => {
+    const stages = Array.from({length: 5}, (_, index) => ({
+      id: `stage-${index}`,
+      label: `Stage ${index}`,
+    }));
+
+    expect(dataFlowContentSchema.safeParse({...flowContent, stages}).success).toBe(false);
+  });
+
+  it('rejects duplicate stage ids', () => {
+    const result = dataFlowContentSchema.safeParse({
+      ...flowContent,
+      stages: [
+        {id: 'same', label: 'A'},
+        {id: 'same', label: 'B'},
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((issue) => issue.message.includes('duplicate stage id'))).toBe(
+        true,
+      );
+    }
   });
 });

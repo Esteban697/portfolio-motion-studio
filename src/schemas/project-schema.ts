@@ -270,6 +270,70 @@ export const voiceoverSchema = z.strictObject({
 
 export type VoiceoverContent = z.infer<typeof voiceoverSchema>;
 
+/** A screenshot or conceptual image in the showcase scene. */
+export const showcaseImageSchema = z.strictObject({
+  src: projectRelativePath,
+  caption: displayText('caption', 80),
+  /**
+   * `capture` is a real screenshot; `concept` is an illustration and is
+   * labelled as such on screen. Never present a concept as a capture.
+   */
+  kind: z.enum(['capture', 'concept']).default('capture'),
+});
+
+export type ShowcaseImageContent = z.infer<typeof showcaseImageSchema>;
+
+export const imageShowcaseContentSchema = z.strictObject({
+  index: displayText('index', 3),
+  label: displayText('label', 40),
+  chapter: displayText('chapter', 40),
+  headline: displayText('headline', 90),
+  images: z
+    .array(showcaseImageSchema)
+    .min(1, 'a showcase needs at least one image')
+    .max(3, 'a showcase supports at most three images'),
+  footnote: z.string().trim().max(160, 'footnote must be at most 160 characters').optional(),
+});
+
+export type ImageShowcaseContent = z.infer<typeof imageShowcaseContentSchema>;
+
+/** One stage in a linear data flow. */
+export const dataFlowStageSchema = z.strictObject({
+  id: kebabId('stage id'),
+  label: displayText('stage label', 24),
+  sublabel: z.string().trim().max(28, 'stage sublabel must be at most 28 characters').optional(),
+});
+
+export type DataFlowStageContent = z.infer<typeof dataFlowStageSchema>;
+
+export const dataFlowContentSchema = z
+  .strictObject({
+    index: displayText('index', 3),
+    label: displayText('label', 40),
+    chapter: displayText('chapter', 40),
+    headline: displayText('headline', 90),
+    stages: z
+      .array(dataFlowStageSchema)
+      .min(2, 'a data flow needs at least two stages')
+      .max(4, 'a data flow supports at most four stages'),
+    footnote: z.string().trim().max(160, 'footnote must be at most 160 characters').optional(),
+  })
+  .superRefine((content, ctx) => {
+    const ids = new Set<string>();
+    content.stages.forEach((stage, index) => {
+      if (ids.has(stage.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `duplicate stage id "${stage.id}"`,
+          path: ['stages', index, 'id'],
+        });
+      }
+      ids.add(stage.id);
+    });
+  });
+
+export type DataFlowContent = z.infer<typeof dataFlowContentSchema>;
+
 /**
  * How a scene leaves. `fade` dips through black; `light-fade` blooms through a
  * soft light; `camera-push` pushes the frame forward; `cut` is hard.
@@ -328,6 +392,18 @@ export const architectureDiagramSceneSchema = z.strictObject({
   content: architectureDiagramContentSchema,
 });
 
+export const imageShowcaseSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('image-showcase'),
+  content: imageShowcaseContentSchema,
+});
+
+export const dataFlowSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('data-flow'),
+  content: dataFlowContentSchema,
+});
+
 /**
  * Every scene type the renderer knows. Adding a type requires a component,
  * a registry entry, and a schema member — TypeScript enforces the registry.
@@ -337,6 +413,8 @@ export const supportedSceneTypes = [
   'title-statement',
   'animated-timeline',
   'architecture-diagram',
+  'image-showcase',
+  'data-flow',
   'cinematic-outro',
 ] as const;
 
@@ -345,6 +423,8 @@ export const sceneSchema = z.discriminatedUnion('type', [
   titleStatementSceneSchema,
   animatedTimelineSceneSchema,
   architectureDiagramSceneSchema,
+  imageShowcaseSceneSchema,
+  dataFlowSceneSchema,
   cinematicOutroSceneSchema,
 ]);
 

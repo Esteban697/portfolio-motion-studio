@@ -43,14 +43,18 @@ describe('project folder conventions', () => {
     }
   });
 
-  it('resolves every voiceover through the generated asset registry', () => {
+  it('resolves every referenced asset through the generated registry', () => {
     // Catches a stale `npm run assets` output or a path typo.
     for (const {project} of projects) {
       for (const scene of project.scenes) {
-        if (!scene.voiceover) {
-          continue;
+        if (scene.voiceover) {
+          expect(resolveProjectAsset(project.projectId, scene.voiceover.src)).toBeTruthy();
         }
-        expect(resolveProjectAsset(project.projectId, scene.voiceover.src)).toBeTruthy();
+        if (scene.type === 'image-showcase') {
+          for (const image of scene.content.images) {
+            expect(resolveProjectAsset(project.projectId, image.src)).toBeTruthy();
+          }
+        }
       }
     }
   });

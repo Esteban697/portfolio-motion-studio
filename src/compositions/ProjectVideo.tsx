@@ -41,7 +41,7 @@ export const ProjectVideo: React.FC<{project: ProjectManifest}> = ({project}) =>
               />
             ) : null}
             <SceneTransition transitionIn={transitionIn} transitionOut={scene.transitionOut}>
-              {renderScene(scene, project.brand)}
+              {renderScene(scene, project.brand, project.projectId)}
             </SceneTransition>
           </Sequence>
         );

@@ -53,12 +53,19 @@ generic: no rendering code changes when you add a project.
    | `title-statement` | `TitleStatement` | index, label, statement lines, footnote, ghostNumeral |
    | `animated-timeline` | `AnimatedTimeline` | index, label, chapter, headline, `milestones[]`, footnote |
    | `architecture-diagram` | `ArchitectureDiagram` | index, label, chapter, headline, `diagram.nodes[]` + `diagram.edges[]`, footnote |
+   | `image-showcase` | `ImageShowcase` | index, label, chapter, headline, 1–3 `images[]`, footnote |
+   | `data-flow` | `DataFlow` | index, label, chapter, headline, 2–4 `stages[]`, footnote |
    | `cinematic-outro` | `CinematicOutro` | kicker, closingLine |
 
    Timeline milestones take `{ marker, title, detail? }` — 2 to 6 of them.
    Diagram nodes take `{ id, label, sublabel?, column, row, accent? }` on a
    0–3 × 0–2 grid, and edges take `{ from, to, accent? }`; the schema rejects
    unknown node references, self-edges and two nodes in one cell.
+
+   Showcase images take `{ src, caption, kind }`, where `kind` is `capture`
+   (a real screenshot, framed with browser chrome) or `concept` (an
+   illustration, badged CONCEPT on screen). Data-flow stages take
+   `{ id, label, sublabel? }` and run strictly left to right.
 
    Rules enforced by the schema: unique scene ids, positive durations,
    lowercase kebab-case ids, **at most one accented line per scene**, and no

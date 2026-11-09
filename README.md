@@ -7,11 +7,10 @@ Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
 > **Status — Phase 3 in progress.**
-> Phase 2 is complete: manifests, registry, voiceover, validation,
-> transitions and two samples. Phase 3 has added the **animated timeline** and
-> **architecture diagram** scenes, both demonstrated in the 82-second
-> overview. Image showcase, data flow, and the career-journey / project
-> showcase compositions are next.
+> The full reusable scene set is implemented: intro, statement, animated
+> timeline, architecture diagram, image showcase, data flow and outro. The
+> 82-second overview exercises every one. Remaining Phase 3: the career-journey
+> and project-showcase compositions, which need real project material.
 
 ---
 
@@ -79,7 +78,7 @@ Both samples were rendered and inspected with FFprobe:
 ```
 Sample    H.264 · 1920×1080 · 30 fps · 15.500 s ·  2.65 MB | AAC 48 kHz stereo
 Preview   H.264 ·  960×540  · 30 fps · 15.509 s ·  1.31 MB | AAC 48 kHz
-Overview  H.264 · 1920×1080 · 30 fps · 82.005 s · 11.67 MB | AAC 48 kHz stereo
+Overview  H.264 · 1920×1080 · 30 fps · 82.005 s · 11.94 MB | AAC 48 kHz stereo
 ```
 
 Silence analysis of each file places speech at every scene boundary: 0.0,
@@ -97,7 +96,9 @@ projects/
 │   └── assets/voice/
 └── studio-overview/         # 82 s overview, eight scenes
     ├── manifest.json
-    └── assets/voice/
+    └── assets/
+        ├── voice/
+        └── images/
 
 src/
 ├── index.ts                 # Remotion entry point
@@ -118,6 +119,11 @@ src/
 │   ├── diagram/
 │   │   ├── ArchitectureDiagram.tsx
 │   │   └── layout.ts        # grid placement + edge paths (pure, tested)
+│   ├── showcase/
+│   │   └── ImageShowcase.tsx
+│   ├── flow/
+│   │   ├── DataFlow.tsx
+│   │   └── layout.ts        # stage spacing (pure, tested)
 │   ├── primitives/
 │   │   ├── Backdrop.tsx     # Layered gradients, grid, vignette
 │   │   ├── Chrome.tsx       # Top chrome + side rail
@@ -224,7 +230,7 @@ eligibility before further use. Full notes:
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
 | 2 | Scene manifest schema, registry, voiceover, transitions | ✅ complete |
-| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | 🟨 in progress — timeline + architecture diagram done; image showcase, data flow, project compositions next |
+| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | 🟨 in progress — scene set complete; project compositions next |
 | 4 | Claude Code production skills + approval workflow | ⬜ |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |
 

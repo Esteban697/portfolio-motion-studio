@@ -68,22 +68,31 @@ for (const projectId of projectIds) {
     );
   }
 
-  for (const scene of project.scenes) {
-    if (!scene.voiceover) {
-      continue;
-    }
+  const assetSources = new Map<string, string>(); // path → scene id, for errors
 
-    const absolutePath = resolve(join(PROJECTS_DIR, projectId), scene.voiceover.src);
+  for (const scene of project.scenes) {
+    if (scene.voiceover) {
+      assetSources.set(scene.voiceover.src, scene.id);
+    }
+    if (scene.type === 'image-showcase') {
+      for (const image of scene.content.images) {
+        assetSources.set(image.src, scene.id);
+      }
+    }
+  }
+
+  for (const [src, sceneId] of assetSources) {
+    const absolutePath = resolve(join(PROJECTS_DIR, projectId), src);
     if (!existsSync(absolutePath)) {
       fail(
-        `Scene "${scene.id}" in ${projectId}: voiceover not found at ${scene.voiceover.src}\n` +
+        `Scene "${sceneId}" in ${projectId}: asset not found at ${src}\n` +
           `Expected: ${absolutePath}`,
       );
     }
 
     entries.push({
       projectId,
-      src: scene.voiceover.src,
+      src,
       importPath: toImportPath(absolutePath),
     });
   }
