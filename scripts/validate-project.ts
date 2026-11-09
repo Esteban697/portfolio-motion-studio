@@ -152,7 +152,7 @@ const main = (): void => {
 
   console.log(
     `  ${'ID'.padEnd(18)}${'TYPE'.padEnd(22)}${'DURATION'.padStart(10)}${'FRAMES'.padStart(8)}` +
-      `${'OUT'.padStart(7)}${'VOICE'.padStart(9)}`,
+      `${'OUT'.padStart(12)}${'VOICE'.padStart(9)}`,
   );
   for (const {scene, durationInFrames} of timeline) {
     const audio = narration.get(scene.id);
@@ -160,7 +160,7 @@ const main = (): void => {
       `  ${scene.id.padEnd(18)}${scene.type.padEnd(22)}` +
         `${`${scene.durationSeconds.toFixed(2)}s`.padStart(10)}` +
         `${String(durationInFrames).padStart(8)}` +
-        `${scene.transitionOut.padStart(7)}` +
+        `${scene.transitionOut.padStart(12)}` +
         `${(audio ? `${audio.durationSeconds.toFixed(2)}s` : '—').padStart(9)}`,
     );
   }

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "projectId": "studio-overview",
+  "title": "Studio Overview",
+  "profile": "landscape-1080p",
+  "narrative": {
+    "logline": "A seventy-second overview of the Portfolio Motion Studio pipeline, with placeholder narration.",
+    "targetDurationSeconds": 71.5
+  },
+  "brand": {
+    "initials": "PM",
+    "name": "Portfolio Motion Studio",
+    "tagline": "Cinematic video, produced like software.",
+    "url": "yourportfolio.dev"
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "cinematic-intro",
+      "durationSeconds": 11,
+      "voiceover": { "src": "assets/voice/scene-01-intro.wav" },
+      "transitionOut": "light-fade",
+      "content": {
+        "eyebrow": "Portfolio · 2026",
+        "headline": [
+          { "text": "A portfolio," },
+          { "text": "produced like" },
+          { "text": "software.", "accent": true }
+        ],
+        "subline": "A local-first pipeline for cinematic portfolio video.",
+        "chapter": "Overview",
+        "index": "01",
+        "railLabel": "Intro"
+      }
+    },
+    {
+      "id": "problem",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "voiceover": { "src": "assets/voice/scene-02-problem.wav" },
+      "transitionOut": "fade",
+      "content": {
+        "index": "02",
+        "label": "The problem",
+        "lines": [
+          { "text": "Portfolio video is" },
+          { "text": "usually edited" },
+          { "text": "one cut at a time.", "accent": true }
+        ],
+        "footnote": "Hand-edited timelines do not scale to every project.",
+        "ghostNumeral": "02"
+      }
+    },
+    {
+      "id": "principle",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "voiceover": { "src": "assets/voice/scene-03-principle.wav" },
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "03",
+        "label": "The principle",
+        "lines": [
+          { "text": "AI proposes the story." },
+          { "text": "Deterministic code", "accent": true },
+          { "text": "controls every frame." }
+        ],
+        "footnote": "Timing, animation and composition are code, not guesswork.",
+        "ghostNumeral": "03"
+      }
+    },
+    {
+      "id": "pipeline",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "voiceover": { "src": "assets/voice/scene-04-pipeline.wav" },
+      "transitionOut": "light-fade",
+      "content": {
+        "index": "04",
+        "label": "The pipeline",
+        "lines": [
+          { "text": "Facts." },
+          { "text": "Script." },
+          { "text": "Storyboard." },
+          { "text": "Render.", "accent": true }
+        ],
+        "footnote": "Each stage is approved before the next one begins.",
+        "ghostNumeral": "04"
+      }
+    },
+    {
+      "id": "assets",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "voiceover": { "src": "assets/voice/scene-05-assets.wav" },
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "05",
+        "label": "Your assets",
+        "lines": [
+          { "text": "Your voice." },
+          { "text": "Your screenshots." },
+          { "text": "Your machine.", "accent": true }
+        ],
+        "footnote": "Nothing is uploaded. Originals are never modified.",
+        "ghostNumeral": "05"
+      }
+    },
+    {
+      "id": "result",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "voiceover": { "src": "assets/voice/scene-06-result.wav" },
+      "transitionOut": "fade",
+      "content": {
+        "index": "06",
+        "label": "The result",
+        "lines": [
+          { "text": "Same inputs." },
+          { "text": "Same frames." },
+          { "text": "Every time.", "accent": true }
+        ],
+        "footnote": "A render you can repeat, review and trust.",
+        "ghostNumeral": "06"
+      }
+    },
+    {
+      "id": "outro",
+      "type": "cinematic-outro",
+      "durationSeconds": 10.5,
+      "voiceover": { "src": "assets/voice/scene-07-outro.wav" },
+      "transitionOut": "fade",
+      "content": {
+        "kicker": "End of overview",
+        "closingLine": "Build once. Produce every video from the same pipeline."
+      }
+    }
+  ]
+}

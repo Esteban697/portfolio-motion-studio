@@ -60,10 +60,12 @@ choices alike.
 Manifest validation also runs inside the app, so an invalid manifest stops the
 preview with the same readable errors instead of rendering a broken video.
 
-## Phase 2 remaining (planned)
+## Phase 2 status
 
-- A 60–90 second sample composition using the placeholder narration as the
-  timing reference.
+Complete: manifest schema, scene registry, per-scene voiceover with FFprobe
+validation, in-scene transitions, and a 71.5 s overview sample. Phase 3 adds
+timeline, image showcase, architecture diagram and data-flow scenes, plus the
+career-journey and project-showcase compositions.
 
 ## Recording guidance
 

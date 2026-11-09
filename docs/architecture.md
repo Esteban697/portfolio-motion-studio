@@ -149,6 +149,11 @@ sufficient.
 Each scene is self-contained and reads only props, so it can be reused by any
 composition.
 
+`StudioOverview` is the Phase 2 acceptance sample: seven scenes, 71.5 s,
+built entirely from the same three scene types with varied transitions and
+narration. Adding it required a manifest, narration files and two lines in
+`Root.tsx` — no rendering code changed.
+
 ## Decisions and their reasons
 
 | Decision | Reason |

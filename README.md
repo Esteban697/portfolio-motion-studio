@@ -6,11 +6,12 @@ technical project videos from code.
 Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
-> **Status — Phase 2 in progress.**
-> Projects are data: a validated manifest drives scene order, timing, copy and
-> per-scene narration through an exhaustive registry. Placeholder narration is
-> wired end to end and verified in the render. Remaining Phase 2 work: richer
-> transitions and a 60–90 s sample (see [Roadmap](#roadmap)).
+> **Status — Phase 2 complete.**
+> Projects are data: a validated manifest drives scene order, timing, copy,
+> per-scene narration and transitions through an exhaustive registry. Two
+> sample compositions render end to end — a 15.5 s short sample and a 71.5 s
+> overview. Phase 3 adds timeline, screenshot, architecture and data-flow
+> scenes.
 
 ---
 
@@ -40,6 +41,8 @@ scrub the timeline.
 ```bash
 npm run render:sample          # 1920×1080 H.264 MP4 → out/cinematic-sample-1080p.mp4
 npm run render:sample:preview  # 960×540 preview (scale 0.5) → out/cinematic-sample-preview.mp4
+npm run render:overview        # 71.5 s overview → out/studio-overview-1080p.mp4
+npm run render:overview:preview
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
 npm run assets                 # regenerate the static asset registry
@@ -71,15 +74,17 @@ later renders reuse both caches.
 
 ### Verified output
 
-The Phase 2 sample was rendered and inspected with FFprobe:
+Both samples were rendered and inspected with FFprobe:
 
 ```
-Final:   H.264 · 1920×1080 · 30 fps · 15.500 s · 2.65 MB | AAC 48 kHz stereo
-Preview: H.264 ·  960×540  · 30 fps · 15.509 s · 1.31 MB | AAC 48 kHz
+Sample    H.264 · 1920×1080 · 30 fps · 15.500 s · 2.65 MB | AAC 48 kHz stereo
+Preview   H.264 ·  960×540  · 30 fps · 15.509 s · 1.31 MB | AAC 48 kHz
+Overview  H.264 · 1920×1080 · 30 fps · 71.509 s · 9.60 MB | AAC 48 kHz stereo
 ```
 
-Silence analysis of the final file places speech at ~0.0 s, 4.1 s and 10.1 s —
-matching the scene boundaries at 4 s and 10 s.
+Silence analysis of each file places speech at every scene boundary (0.0 s,
+4.1 s, 10.1 s in the sample; 0, 11.1, 21.1, 31.1, 41.1, 51.1, 61.1 s in the
+overview).
 
 ---
 
@@ -87,10 +92,12 @@ matching the scene boundaries at 4 s and 10 s.
 
 ```text
 projects/
-└── studio-sample/
-    ├── manifest.json        # Brand, scenes, durations, copy, voiceover paths
-    └── assets/
-        └── voice/           # Placeholder narration (replace with your own)
+├── studio-sample/           # 15.5 s pipeline sample
+│   ├── manifest.json
+│   └── assets/voice/
+└── studio-overview/         # 71.5 s overview, seven scenes
+    ├── manifest.json
+    └── assets/voice/
 
 src/
 ├── index.ts                 # Remotion entry point
@@ -209,8 +216,8 @@ eligibility before further use. Full notes:
 | --- | --- | --- |
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
-| 2 | Scene manifest schema, registry, voiceover, transitions | 🟨 in progress — schema, registry, voiceover, audio validation, transitions done; 60–90 s sample next |
-| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ⬜ |
+| 2 | Scene manifest schema, registry, voiceover, transitions | ✅ complete |
+| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ⬜ next |
 | 4 | Claude Code production skills + approval workflow | ⬜ |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |
 

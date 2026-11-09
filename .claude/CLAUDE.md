@@ -45,11 +45,13 @@ npm run still:sample           # poster frame
 
 ## Status
 
-Phase 1 complete. Phase 2 in progress: manifest schema (Zod), exhaustive scene
-registry, manifest-driven composition, per-scene voiceover with FFprobe
-validation, asset registry, in-scene transitions, validation CLI and 62 tests
-are done. Remaining Phase 2: a 60–90 s sample. Do not jump ahead to the
-Claude Code production skills (Phase 4) or social formats (Phase 5).
+Phase 2 complete: manifest schema (Zod), exhaustive scene registry,
+manifest-driven composition, per-scene voiceover with FFprobe validation,
+asset registry, in-scene transitions, validation CLI, two sample compositions
+(15.5 s and 71.5 s) and 66 tests. Next is Phase 3: timeline, image showcase,
+architecture diagram and data-flow scenes, then career-journey and
+project-showcase compositions. Do not jump ahead to the Claude Code production
+skills (Phase 4) or social formats (Phase 5).
 
 ## Remotion license
 

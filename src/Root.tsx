@@ -1,8 +1,9 @@
 import React from 'react';
 import {Composition} from 'remotion';
-import manifest from '../projects/studio-sample/manifest.json';
+import overviewManifest from '../projects/studio-overview/manifest.json';
+import sampleManifest from '../projects/studio-sample/manifest.json';
 import {ProjectVideo} from './compositions/ProjectVideo';
-import {parseProjectManifest} from './schemas/project-schema';
+import {parseProjectManifest, type ProjectManifest} from './schemas/project-schema';
 import {defaultProfile} from './theme';
 import {calculateProjectDurationInFrames} from './utils/project';
 
@@ -10,23 +11,32 @@ import {calculateProjectDurationInFrames} from './utils/project';
  * Validated once at startup: a malformed manifest fails here with a readable
  * message instead of rendering something broken.
  */
-const studioSample = parseProjectManifest(manifest);
+const studioSample = parseProjectManifest(sampleManifest);
+const studioOverview = parseProjectManifest(overviewManifest);
 
 /**
- * Composition registry. Each project manifest becomes one composition whose
- * id is registered statically (Remotion requires known compositions), but
- * whose content, scenes and timing are entirely data-driven.
+ * Composition registry. Remotion requires compositions to be known
+ * statically, so each project gets one entry — but content, scenes, timing
+ * and narration are entirely data-driven.
  */
+const registerProject = (id: string, project: ProjectManifest): React.ReactElement => (
+  <Composition
+    key={id}
+    id={id}
+    component={ProjectVideo}
+    defaultProps={{project}}
+    durationInFrames={calculateProjectDurationInFrames(project.scenes, defaultProfile.fps)}
+    fps={defaultProfile.fps}
+    width={defaultProfile.width}
+    height={defaultProfile.height}
+  />
+);
+
 export const RemotionRoot: React.FC = () => {
   return (
-    <Composition
-      id="CinematicSample"
-      component={ProjectVideo}
-      defaultProps={{project: studioSample}}
-      durationInFrames={calculateProjectDurationInFrames(studioSample.scenes, defaultProfile.fps)}
-      fps={defaultProfile.fps}
-      width={defaultProfile.width}
-      height={defaultProfile.height}
-    />
+    <>
+      {registerProject('CinematicSample', studioSample)}
+      {registerProject('StudioOverview', studioOverview)}
+    </>
   );
 };
