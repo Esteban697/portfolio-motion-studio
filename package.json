@@ -10,13 +10,20 @@
   "scripts": {
     "dev": "remotion studio",
     "studio": "remotion studio",
+    "assets": "tsx scripts/generate-assets.ts",
+    "predev": "npm run assets",
     "compositions": "remotion compositions",
     "typecheck": "tsc --noEmit",
+    "pretypecheck": "npm run assets",
     "test": "vitest run",
+    "pretest": "npm run assets",
     "validate": "tsx scripts/validate-project.ts",
     "render:sample": "remotion render CinematicSample out/cinematic-sample-1080p.mp4",
+    "prerender:sample": "npm run assets",
     "render:sample:preview": "remotion render CinematicSample out/cinematic-sample-preview.mp4 --scale=0.5",
-    "still:sample": "remotion still CinematicSample out/cinematic-sample-poster.png --frame=150"
+    "prerender:sample:preview": "npm run assets",
+    "still:sample": "remotion still CinematicSample out/cinematic-sample-poster.png --frame=150",
+    "prestill:sample": "npm run assets"
   },
   "dependencies": {
     "react": "19.3.1",

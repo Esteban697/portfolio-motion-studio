@@ -10,7 +10,11 @@ generic: no rendering code changes when you add a project.
    ```text
    projects/<project-id>/
    ├── manifest.json
-   └── assets/            # voice/, images/, screenshots/, music/ (added in Phase 2–3)
+   └── assets/
+       ├── voice/          # one WAV per scene, 48 kHz
+       ├── images/         # Phase 3
+       ├── screenshots/    # Phase 3
+       └── music/          # optional, Phase 3
    ```
 
    The directory name must equal `projectId` in the manifest, and both must be
@@ -26,8 +30,17 @@ generic: no rendering code changes when you add a project.
    | `title` | human title used in tooling |
    | `profile` | `landscape-1080p` |
    | `brand` | `initials` (1–3 chars), `name`, `tagline`, `url` (no protocol) |
-   | `scenes` | non-empty list; each has `id`, `type`, `durationSeconds`, `content` |
+   | `scenes` | non-empty list; each has `id`, `type`, `durationSeconds`, `content`, optional `voiceover` |
    | `narrative` | optional `logline` / `targetDurationSeconds` |
+
+   A scene's optional narration points at a project-relative file:
+
+   ```json
+   "voiceover": { "src": "assets/voice/scene-01-intro.wav", "volumeDb": -2 }
+   ```
+
+   `volumeDb` is attenuation only (≤ 0). Narration must fit inside its scene —
+   overlong audio is an error, not silently trimmed.
 
    Scene `type` must be one of the registered types:
 
@@ -47,8 +60,10 @@ generic: no rendering code changes when you add a project.
    npm run validate -- --project <project-id>
    ```
 
-   This prints the scene table, frame timeline and total duration, and fails
-   with one line per issue.
+   This prints the scene table, frame timeline, narration lengths and total
+   duration, and fails with one line per issue. `npm run assets` runs
+   automatically before renders; run it manually after adding audio if you
+   want the generated registry updated immediately.
 
 4. **Register the composition** in `src/Root.tsx`:
 

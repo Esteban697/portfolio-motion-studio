@@ -7,8 +7,9 @@ Local-first Remotion pipeline for cinematic portfolio video. Read
 
 ```bash
 npm run dev                    # Remotion Studio
+npm run assets                 # regenerate src/generated/project-assets.ts
 npm run typecheck              # strict TS check — run before claiming done
-npm test                       # vitest: schema, timeline, registry, timing
+npm test                       # vitest: schema, timeline, registry, audio, assets
 npm run validate -- --project studio-sample
 npm run render:sample          # 1080p H.264 → out/
 npm run render:sample:preview  # 960×540 (--scale=0.5; H.264 needs even int dims)
@@ -28,6 +29,11 @@ npm run still:sample           # poster frame
   scene frames are rounded per scene and summed (`src/utils/project.ts`).
 - Manifests are strict: unknown fields are errors. Bump `schemaVersion` for
   breaking changes.
+- `src/generated/project-assets.ts` is generated — never hand-edit it. Run
+  `npm run assets` after adding or renaming audio.
+- Narration: one file per scene, project-relative path, attenuation-only
+  `volumeDb`. Overlong narration is a validation error and must never be
+  silently trimmed or time-stretched.
 - Renders must stay local, deterministic and offline (no webfonts, no network
   assets).
 - Never modify original recordings/screenshots; write derived files elsewhere.
@@ -38,10 +44,10 @@ npm run still:sample           # poster frame
 ## Status
 
 Phase 1 complete. Phase 2 in progress: manifest schema (Zod), exhaustive scene
-registry, manifest-driven composition, validation CLI and 33 tests are done.
-Remaining Phase 2: per-scene voiceover + audio validation, richer transitions,
-60–90 s sample. Do not jump ahead to the Claude Code production skills
-(Phase 4) or social formats (Phase 5).
+registry, manifest-driven composition, per-scene voiceover with FFprobe
+validation, asset registry, validation CLI and 46 tests are done. Remaining
+Phase 2: richer transitions and a 60–90 s sample. Do not jump ahead to the
+Claude Code production skills (Phase 4) or social formats (Phase 5).
 
 ## Remotion license
 

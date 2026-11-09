@@ -49,22 +49,23 @@ choices alike.
 ## Current workflow (Phase 2 in progress)
 
 1. Create or edit `projects/<id>/manifest.json` (copy the studio sample).
-2. `npm run validate -- --project <id>` — fix schema, id or timeline issues.
-3. `npm run dev` and review in Remotion Studio.
-4. `npm run typecheck` and `npm test`.
-5. `npm run render:sample:preview` for a fast look, then the final render.
+2. Record narration per scene into `projects/<id>/assets/voice/` (48 kHz WAV),
+   or point `voiceover.src` at an existing file. Originals stay untouched.
+3. `npm run validate -- --project <id>` — fixes schema, id, timeline and
+   narration-fit issues. It prints each scene's narration length in seconds.
+4. `npm run dev` and review picture and sound in Remotion Studio.
+5. `npm run typecheck` and `npm test`.
+6. `npm run render:sample:preview` for a fast look, then the final render.
 
 Manifest validation also runs inside the app, so an invalid manifest stops the
 preview with the same readable errors instead of rendering a broken video.
 
 ## Phase 2 remaining (planned)
 
-- Per-scene voiceover: one WAV per scene in `projects/<id>/assets/voice/`.
-- Audio inspection with FFprobe (format, sample rate, duration) and explicit
-  narration-vs-scene duration checks — reported, not silently stretched.
 - Richer transitions (`light-fade`, `camera-push`) behind the existing
-  `transitionOut` field.
-- A 60–90 second sample using real or temporary narration.
+  `transitionOut` field; `cut` and `fade` work today.
+- A 60–90 second sample composition using the placeholder narration as the
+  timing reference.
 
 ## Recording guidance
 

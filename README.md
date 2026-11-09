@@ -7,9 +7,10 @@ Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
 > **Status — Phase 2 in progress.**
-> Projects are now data: a validated `manifest.json` drives scene order,
-> durations and copy through an exhaustive scene registry. Voiceover and
-> richer transitions are the remaining Phase 2 work (see [Roadmap](#roadmap)).
+> Projects are data: a validated manifest drives scene order, timing, copy and
+> per-scene narration through an exhaustive registry. Placeholder narration is
+> wired end to end and verified in the render. Remaining Phase 2 work: richer
+> transitions and a 60–90 s sample (see [Roadmap](#roadmap)).
 
 ---
 
@@ -41,10 +42,16 @@ npm run render:sample          # 1920×1080 H.264 MP4 → out/cinematic-sample-1
 npm run render:sample:preview  # 960×540 preview (scale 0.5) → out/cinematic-sample-preview.mp4
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
+npm run assets                 # regenerate the static asset registry
 npm run typecheck              # strict TypeScript check
-npm test                       # schema, timeline, registry and timing tests
+npm test                       # schema, timeline, registry, audio and asset tests
 npm run validate -- --project studio-sample   # validate a project manifest
 ```
+
+`npm run assets` scans each manifest's voiceover paths and regenerates
+`src/generated/project-assets.ts`, because Remotion needs static imports rather
+than runtime paths. It runs automatically before `dev`, `typecheck`, `test` and
+each render.
 
 `npm run validate` checks JSON syntax, the manifest schema, scene ids, supported
 scene types, the profile and the frame timeline, and prints the scene table
@@ -64,12 +71,15 @@ later renders reuse both caches.
 
 ### Verified output
 
-The Phase 1 sample was rendered and inspected with FFprobe:
+The Phase 2 sample was rendered and inspected with FFprobe:
 
 ```
-Final:   H.264 · 1920×1080 · 30 fps · 10.000 s · 1.67 MB
-Preview: H.264 ·  960×540  · 30 fps · 10.000 s · 0.61 MB
+Final:   H.264 · 1920×1080 · 30 fps · 15.500 s · 2.65 MB | AAC 48 kHz stereo
+Preview: H.264 ·  960×540  · 30 fps · 15.509 s · 1.31 MB | AAC 48 kHz
 ```
+
+Silence analysis of the final file places speech at ~0.0 s, 4.1 s and 10.1 s —
+matching the scene boundaries at 4 s and 10 s.
 
 ---
 
@@ -78,13 +88,15 @@ Preview: H.264 ·  960×540  · 30 fps · 10.000 s · 0.61 MB
 ```text
 projects/
 └── studio-sample/
-    └── manifest.json        # Brand, scenes, durations, on-screen copy
+    ├── manifest.json        # Brand, scenes, durations, copy, voiceover paths
+    └── assets/
+        └── voice/           # Placeholder narration (replace with your own)
 
 src/
 ├── index.ts                 # Remotion entry point
 ├── Root.tsx                 # Composition registry; validates the manifest once
 ├── compositions/
-│   └── ProjectVideo.tsx     # Manifest → scene timeline → sequences
+│   └── ProjectVideo.tsx     # Manifest → timeline → sequences + audio
 ├── scenes/
 │   └── registry.tsx         # Scene type → component, exhaustive by type
 ├── schemas/
@@ -100,12 +112,21 @@ src/
 │       ├── BrandMark.tsx    # SVG monogram plate
 │       └── SceneFade.tsx    # Fade-in/out scene envelope
 ├── theme/                   # Design tokens: color, type, motion, dimensions
+├── generated/
+│   └── project-assets.ts    # AUTO-GENERATED asset path → URL registry
+├── types/
+│   └── assets.d.ts          # Audio import declarations
 └── utils/
     ├── timing.ts            # Seconds ⇄ frames, scene progress
-    └── project.ts           # Scene timeline and total duration
+    ├── project.ts           # Scene timeline and total duration
+    ├── assets.ts            # Asset resolution + dB → gain
+    └── audio.ts             # FFprobe inspection + narration fit rules
 
-scripts/validate-project.ts  # Manifest validation CLI
-test/                        # Vitest suites for schema, timeline, registry, timing
+scripts/
+├── generate-assets.ts       # Scans manifests → generated asset registry
+└── validate-project.ts      # Manifest + narration validation CLI
+
+test/                        # Vitest suites: schema, timeline, registry, timing, audio, assets
 ```
 
 The theme is the only place colors, fonts, sizes and easings are declared.
@@ -133,6 +154,27 @@ Renders stay offline and deterministic. To bundle a brand font, see
 [docs/visual-style-guide.md](docs/visual-style-guide.md#custom-fonts), and
 record its license.
 
+## Narration
+
+One WAV per scene at `projects/<id>/assets/voice/`, referenced from the manifest:
+
+```json
+"voiceover": { "src": "assets/voice/scene-01-intro.wav", "volumeDb": -2 }
+```
+
+`npm run validate` checks the file exists, decodes it with FFprobe and compares
+its duration to the scene:
+
+- narration **longer** than the scene is an error — Remotion would cut it off;
+- narration covering less than half the scene warns about unintended silence;
+- a sample rate other than 48 kHz warns.
+
+Durations are reported, never auto-adjusted: fix the manifest or the recording.
+
+The bundled sample uses **TTS placeholder narration** (see
+`projects/studio-sample/assets/voice/README.md`). Replace those files with your
+own 48 kHz recordings — the pipeline never modifies original audio.
+
 ## Licensing
 
 **Remotion is source-available, not OSI-approved open source.** It is free for
@@ -149,7 +191,7 @@ eligibility before further use. Full notes:
 | --- | --- | --- |
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
-| 2 | Scene manifest schema, registry, voiceover, transitions | 🟨 in progress — schema, registry, validation, tests done; voiceover + transitions next |
+| 2 | Scene manifest schema, registry, voiceover, transitions | 🟨 in progress — schema, registry, voiceover, audio validation done; transitions + 60–90 s sample next |
 | 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ⬜ |
 | 4 | Claude Code production skills + approval workflow | ⬜ |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |

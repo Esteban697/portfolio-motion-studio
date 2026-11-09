@@ -1,9 +1,10 @@
 import React from 'react';
-import {AbsoluteFill, Sequence, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, useVideoConfig} from 'remotion';
 import {SceneFade} from '../components/primitives/SceneFade';
 import {renderScene} from '../scenes/registry';
 import type {ProjectManifest} from '../schemas/project-schema';
 import {colors} from '../theme';
+import {dbToGain, resolveProjectAsset} from '../utils/assets';
 import {buildSceneTimeline} from '../utils/project';
 
 /**
@@ -28,6 +29,12 @@ export const ProjectVideo: React.FC<{project: ProjectManifest}> = ({project}) =>
             durationInFrames={durationInFrames}
             premountFor={fps}
           >
+            {scene.voiceover ? (
+              <Audio
+                src={resolveProjectAsset(project.projectId, scene.voiceover.src)}
+                volume={dbToGain(scene.voiceover.volumeDb)}
+              />
+            ) : null}
             {scene.transitionOut === 'fade' ? <SceneFade>{rendered}</SceneFade> : rendered}
           </Sequence>
         );

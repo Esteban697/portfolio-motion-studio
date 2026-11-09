@@ -1,15 +1,16 @@
-import {existsSync, readFileSync} from 'node:fs';
-import {relative, resolve} from 'node:path';
+import {existsSync} from 'node:fs';
+import {dirname, relative, resolve} from 'node:path';
 import {formatIssues, projectManifestSchema} from '../src/schemas/project-schema';
 import {profiles} from '../src/theme/dimensions';
+import {evaluateNarrationFit, probeAudio, type AudioInfo, type NarrationIssue} from '../src/utils/audio';
 import {buildSceneTimeline} from '../src/utils/project';
+import {readJsonFile} from '../src/utils/read-json';
 
 /**
  * Validates a project manifest before rendering.
  *
- * Phase 2 scope: JSON syntax, schema, scene ids, supported types, profile and
- * duration/frame math. Asset and audio checks are added with the voiceover
- * step.
+ * Phase 2 scope: JSON syntax, schema, scene ids, supported types, profile,
+ * duration/frame math, and narration presence, format and fit.
  */
 
 const USAGE = `Usage:
@@ -56,7 +57,7 @@ const parseArgs = (argv: string[]): Args => {
 
 const readJson = (path: string): unknown => {
   try {
-    return JSON.parse(readFileSync(path, 'utf8')) as unknown;
+    return readJsonFile(path);
   } catch (error) {
     return fail(`Could not read JSON from ${path}\n${(error as Error).message}`);
   }
@@ -106,23 +107,75 @@ const main = (): void => {
   const totalFrames = timeline.reduce((sum, entry) => sum + entry.durationInFrames, 0);
   const totalSeconds = totalFrames / profile.fps;
 
-  console.log(`\nProject  ${project.projectId} — ${project.title}`);
+  // Narration: existence, decodability, and fit against each scene.
+  const projectDir = dirname(manifestPath);
+  const narration = new Map<string, AudioInfo>();
+  const narrationIssues: NarrationIssue[] = [];
+
+  for (const {scene} of timeline) {
+    if (!scene.voiceover) {
+      continue;
+    }
+
+    const audioPath = resolve(projectDir, scene.voiceover.src);
+    if (!existsSync(audioPath)) {
+      fail(
+        `Scene "${scene.id}": voiceover not found at ${scene.voiceover.src}\n` +
+          `Expected: ${relative(process.cwd(), audioPath)}`,
+      );
+    }
+
+    const info: AudioInfo = (() => {
+      try {
+        return probeAudio(audioPath);
+      } catch (error) {
+        return fail((error as Error).message);
+      }
+    })();
+
+    narration.set(scene.id, info);
+    narrationIssues.push(
+      ...evaluateNarrationFit({
+        sceneId: scene.id,
+        sceneSeconds: scene.durationSeconds,
+        narration: info,
+      }),
+    );
+  }
+
+  console.log(`\nProject   ${project.projectId} — ${project.title}`);
   console.log(
-    `Profile  ${profile.id} (${profile.width}×${profile.height} @ ${profile.fps} fps)`,
+    `Profile   ${profile.id} (${profile.width}×${profile.height} @ ${profile.fps} fps)`,
   );
-  console.log(
-    `Scenes   ${timeline.length}, total ${totalSeconds.toFixed(2)}s (${totalFrames} frames)\n`,
-  );
+  console.log(`Narration ${narration.size}/${timeline.length} scenes`);
+  console.log(`Total     ${totalSeconds.toFixed(2)}s (${totalFrames} frames)\n`);
 
   console.log(
-    `  ${'ID'.padEnd(18)}${'TYPE'.padEnd(22)}${'DURATION'.padStart(10)}${'FRAMES'.padStart(8)}  OUT`,
+    `  ${'ID'.padEnd(18)}${'TYPE'.padEnd(22)}${'DURATION'.padStart(10)}${'FRAMES'.padStart(8)}` +
+      `${'OUT'.padStart(7)}${'VOICE'.padStart(9)}`,
   );
   for (const {scene, durationInFrames} of timeline) {
+    const audio = narration.get(scene.id);
     console.log(
       `  ${scene.id.padEnd(18)}${scene.type.padEnd(22)}` +
         `${`${scene.durationSeconds.toFixed(2)}s`.padStart(10)}` +
-        `${String(durationInFrames).padStart(8)}  ${scene.transitionOut}`,
+        `${String(durationInFrames).padStart(8)}` +
+        `${scene.transitionOut.padStart(7)}` +
+        `${(audio ? `${audio.durationSeconds.toFixed(2)}s` : '—').padStart(9)}`,
     );
+  }
+
+  if (narrationIssues.length > 0) {
+    console.log('');
+    for (const issue of narrationIssues) {
+      const marker = issue.severity === 'error' ? '✗' : '!';
+      console.log(`${marker} ${issue.message}`);
+    }
+  }
+
+  const errors = narrationIssues.filter((issue) => issue.severity === 'error');
+  if (errors.length > 0) {
+    fail(`${errors.length} narration problem(s) must be fixed before rendering.`);
   }
 
   const target = project.narrative?.targetDurationSeconds;

@@ -105,6 +105,40 @@ export const cinematicOutroContentSchema = z.strictObject({
 
 export type CinematicOutroContent = z.infer<typeof cinematicOutroContentSchema>;
 
+/**
+ * A project-relative POSIX path. Rejects protocols, absolute paths, `..`
+ * segments and backslashes so manifests stay portable and cannot escape the
+ * project directory.
+ */
+const projectRelativePath = z
+  .string()
+  .trim()
+  .min(1, 'path is required')
+  .max(200, 'path must be at most 200 characters')
+  .refine(
+    (value) =>
+      !/^[a-z][a-z0-9+.-]*:\/\//i.test(value) &&
+      !value.startsWith('/') &&
+      !value.includes('\\') &&
+      !value.split('/').includes('..'),
+    {
+      message: 'must be a project-relative POSIX path (no protocol, no leading slash, no "..")',
+    },
+  );
+
+/**
+ * Per-scene narration. One file per scene is the supported workflow: it keeps
+ * revisions and synchronisation local to a single scene.
+ */
+export const voiceoverSchema = z.strictObject({
+  /** Path relative to the project directory, e.g. "assets/voice/scene-01.wav". */
+  src: projectRelativePath,
+  /** Gain in dB. Attenuation only: narration is never boosted past unity. */
+  volumeDb: z.number().min(-40, 'volumeDb must be at least -40').max(0, 'volumeDb must be at most 0').optional(),
+});
+
+export type VoiceoverContent = z.infer<typeof voiceoverSchema>;
+
 /** Fields shared by every scene type. */
 const sceneBase = {
   id: kebabId('scene id'),
@@ -116,6 +150,8 @@ const sceneBase = {
     .number()
     .positive('durationSeconds must be greater than 0')
     .max(600, 'durationSeconds must be at most 600'),
+  /** Optional narration for this scene. Validated against durationSeconds. */
+  voiceover: voiceoverSchema.optional(),
   /**
    * How the scene leaves. `fade` dips through black at the scene's edges;
    * `cut` is hard. Richer transitions arrive later in Phase 2.

@@ -17,7 +17,7 @@ same inputs, a render must produce the same frames.
 | Asset | `projects/<id>/assets/`, `public/` | Voice, music, screenshots, diagrams | Be overwritten by processing steps |
 | Presentation | `src/components/`, `src/theme/` | Visual language, animation, layout, registry | Contain project-specific facts |
 | Rendering | `src/Root.tsx`, `src/compositions/` | Composition registration, manifest → sequences | Scatter dimensions or fps across files |
-| Validation | `scripts/validate-project.ts`, `test/` | Schema, timeline math, future asset/audio checks | Swallow failures |
+| Validation | `scripts/validate-project.ts`, `test/` | Schema, timeline math, narration presence/format/fit | Swallow failures |
 | AI assistance | `.claude/skills/` (Phase 4) | Drafts facts, scripts, storyboards | Publish or finalize without approval |
 
 Data flows one way: manifest → schema (validated once) → `ProjectVideo` →
@@ -60,6 +60,33 @@ cast, justified by the discriminated union tying `content` to `type`.
 
 Unknown fields in a manifest are errors (strict objects). Manifests are
 versioned with `schemaVersion`; any breaking change bumps it.
+
+## Voiceover and asset resolution
+
+Remotion resolves media through the bundler, which needs static imports — but a
+manifest path is only a string at runtime. `scripts/generate-assets.ts` scans
+every project manifest, verifies each `voiceover.src` exists on disk, and emits
+`src/generated/project-assets.ts` mapping project + manifest path → imported
+asset URL.
+
+- The generator runs before `dev`, `typecheck`, `test` and each render.
+- `resolveProjectAsset()` throws a descriptive error for an unregistered path
+  instead of rendering silence.
+- Assets stay inside `projects/<id>/assets/`; nothing is duplicated into
+  `public/`.
+
+Audio is rendered inside the scene's `Sequence`, so Remotion trims it to the
+scene window. Narration is attenuation-only (`volumeDb` ≤ 0, unity by default).
+
+`npm run validate` inspects each file with FFprobe and reports:
+
+| Condition | Severity | Why |
+| --- | --- | --- |
+| narration longer than the scene | error | the sequence boundary would cut the audio off |
+| narration covers < 50 % of the scene | warning | likely unintended silence |
+| sample rate ≠ 48 kHz | warning | project target for delivery |
+
+Durations are reported, never stretched or padded automatically.
 
 ## Profiles
 
@@ -114,6 +141,8 @@ composition.
 | System font stack | Offline renders, no font licensing/network risk; swap point documented |
 | CSS gradients/SVG for atmosphere and marks | No binary assets, editable, resolution-independent |
 | `SceneFade` for `cut`/`fade` | Minimal transition support now; richer transitions (light-fade, camera-push) land later in Phase 2 |
+| Generated asset registry | Keeps originals in `projects/<id>/assets/` with no duplicated copies while still giving Remotion static imports |
+| FFprobe for audio facts | Reuses the delivery toolchain; no audio decoding inside the app |
 | Vitest for tests | Handles TSX and TS paths without custom config; tests cover schema, timeline, registry, timing |
 | Validation runs in the app and in a CLI | The render fails before producing frames, and CI/terminal gets the same messages |
 

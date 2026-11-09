@@ -9,13 +9,13 @@ describe('scene timeline', () => {
   it('places the sample scenes contiguously at 30 fps', () => {
     const timeline = buildSceneTimeline(project.scenes, 30);
 
-    expect(timeline.map((entry) => entry.from)).toEqual([0, 120, 240]);
-    expect(timeline.map((entry) => entry.durationInFrames)).toEqual([120, 120, 60]);
+    expect(timeline.map((entry) => entry.from)).toEqual([0, 120, 300]);
+    expect(timeline.map((entry) => entry.durationInFrames)).toEqual([120, 180, 165]);
     expect(timeline.map((entry) => entry.scene.id)).toEqual(['intro', 'principle', 'outro']);
   });
 
   it('reports the total by summing frames, not by rounding total seconds', () => {
-    expect(calculateProjectDurationInFrames(project.scenes, 30)).toBe(300);
+    expect(calculateProjectDurationInFrames(project.scenes, 30)).toBe(465);
   });
 
   it('sums per-scene rounding, which can differ from rounding the total', () => {
