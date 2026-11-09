@@ -61,6 +61,20 @@ lower-right cyan lift → 80 px grid lattice with a radial mask → vignette.
 Grid opacity stays at 55% of its already-faint line value; it should be felt,
 not read.
 
+## Transitions
+
+| Name | Use |
+| --- | --- |
+| `cut` | Default. Use when the narration pauses between ideas. |
+| `fade` | Chapter breaks and the final shot. Dips through black. |
+| `light-fade` | A lift in energy: a soft silver bloom carries the cut. Never a white flash. |
+| `camera-push` | Forward momentum between related ideas. Scales 1.06 → 1 on entry, 1 → 1.1 on exit. |
+
+- Vary transitions, but never stack two showy ones back to back. A film of all
+  `camera-push` reads as a gimmick.
+- Keep the opening fade up from black; it sets the tone.
+- Transition frames are part of the scene, not extra time.
+
 ## Do not
 
 - Add glow shadows, bevels, or drop shadows to text.

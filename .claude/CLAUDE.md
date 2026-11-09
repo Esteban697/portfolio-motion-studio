@@ -34,6 +34,8 @@ npm run still:sample           # poster frame
 - Narration: one file per scene, project-relative path, attenuation-only
   `volumeDb`. Overlong narration is a validation error and must never be
   silently trimmed or time-stretched.
+- Transitions are in-scene envelopes; they must never change scene duration or
+  overlap scenes. Audio renders outside the transition wrapper.
 - Renders must stay local, deterministic and offline (no webfonts, no network
   assets).
 - Never modify original recordings/screenshots; write derived files elsewhere.
@@ -45,8 +47,8 @@ npm run still:sample           # poster frame
 
 Phase 1 complete. Phase 2 in progress: manifest schema (Zod), exhaustive scene
 registry, manifest-driven composition, per-scene voiceover with FFprobe
-validation, asset registry, validation CLI and 46 tests are done. Remaining
-Phase 2: richer transitions and a 60–90 s sample. Do not jump ahead to the
+validation, asset registry, in-scene transitions, validation CLI and 62 tests
+are done. Remaining Phase 2: a 60–90 s sample. Do not jump ahead to the
 Claude Code production skills (Phase 4) or social formats (Phase 5).
 
 ## Remotion license

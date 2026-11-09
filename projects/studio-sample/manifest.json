@@ -19,7 +19,7 @@
       "type": "cinematic-intro",
       "durationSeconds": 4,
       "voiceover": { "src": "assets/voice/scene-01-intro.wav" },
-      "transitionOut": "fade",
+      "transitionOut": "light-fade",
       "content": {
         "eyebrow": "Portfolio · 2026",
         "headline": [
@@ -38,7 +38,7 @@
       "type": "title-statement",
       "durationSeconds": 6,
       "voiceover": { "src": "assets/voice/scene-02-principle.wav" },
-      "transitionOut": "fade",
+      "transitionOut": "camera-push",
       "content": {
         "index": "02",
         "label": "The principle",

@@ -139,6 +139,17 @@ export const voiceoverSchema = z.strictObject({
 
 export type VoiceoverContent = z.infer<typeof voiceoverSchema>;
 
+/**
+ * How a scene leaves. `fade` dips through black; `light-fade` blooms through a
+ * soft light; `camera-push` pushes the frame forward; `cut` is hard.
+ *
+ * Transitions are in-scene envelopes, not overlaps: a scene's duration is
+ * exact and the timeline never shifts.
+ */
+export const transitionNames = ['cut', 'fade', 'light-fade', 'camera-push'] as const;
+
+export type TransitionName = (typeof transitionNames)[number];
+
 /** Fields shared by every scene type. */
 const sceneBase = {
   id: kebabId('scene id'),
@@ -152,11 +163,8 @@ const sceneBase = {
     .max(600, 'durationSeconds must be at most 600'),
   /** Optional narration for this scene. Validated against durationSeconds. */
   voiceover: voiceoverSchema.optional(),
-  /**
-   * How the scene leaves. `fade` dips through black at the scene's edges;
-   * `cut` is hard. Richer transitions arrive later in Phase 2.
-   */
-  transitionOut: z.enum(['cut', 'fade']).default('cut'),
+  /** Transition leaving this scene into the next one. */
+  transitionOut: z.enum(transitionNames).default('cut'),
 };
 
 export const cinematicIntroSceneSchema = z.strictObject({

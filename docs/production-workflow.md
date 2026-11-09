@@ -62,8 +62,6 @@ preview with the same readable errors instead of rendering a broken video.
 
 ## Phase 2 remaining (planned)
 
-- Richer transitions (`light-fade`, `camera-push`) behind the existing
-  `transitionOut` field; `cut` and `fade` work today.
 - A 60–90 second sample composition using the placeholder narration as the
   timing reference.
 

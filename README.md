@@ -105,12 +105,14 @@ src/
 │   ├── CinematicIntro.tsx
 │   ├── TitleStatement.tsx
 │   ├── CinematicOutro.tsx
-│   └── primitives/
-│       ├── Backdrop.tsx     # Layered gradients, grid, vignette
-│       ├── Chrome.tsx       # Top chrome + side rail
-│       ├── RevealText.tsx   # Masked, staggered line reveal
-│       ├── BrandMark.tsx    # SVG monogram plate
-│       └── SceneFade.tsx    # Fade-in/out scene envelope
+│   ├── primitives/
+│   │   ├── Backdrop.tsx     # Layered gradients, grid, vignette
+│   │   ├── Chrome.tsx       # Top chrome + side rail
+│   │   ├── RevealText.tsx   # Masked, staggered line reveal
+│   │   └── BrandMark.tsx    # SVG monogram plate
+├── transitions/
+│   ├── transitions.ts       # Envelope math (pure functions)
+│   └── SceneTransition.tsx  # Applies enter/exit envelopes per scene
 ├── theme/                   # Design tokens: color, type, motion, dimensions
 ├── generated/
 │   └── project-assets.ts    # AUTO-GENERATED asset path → URL registry
@@ -175,6 +177,22 @@ The bundled sample uses **TTS placeholder narration** (see
 `projects/studio-sample/assets/voice/README.md`). Replace those files with your
 own 48 kHz recordings — the pipeline never modifies original audio.
 
+## Transitions
+
+Each scene names the transition **leaving** it (`transitionOut`). The incoming
+scene enters with the previous scene's transition, so both sides match and the
+timeline stays exact — transitions never overlap scenes or change duration.
+
+| Name | Enter / exit frames | Look |
+| --- | --- | --- |
+| `cut` | 0 / 0 | hard cut (default) |
+| `fade` | 12 / 12 | dip through black |
+| `light-fade` | 14 / 10 | bloom through a soft silver light |
+| `camera-push` | 20 / 16 | forward dolly; exit pushes in, entrance settles |
+
+Short scenes compress their transitions automatically rather than inverting
+the curves.
+
 ## Licensing
 
 **Remotion is source-available, not OSI-approved open source.** It is free for
@@ -191,7 +209,7 @@ eligibility before further use. Full notes:
 | --- | --- | --- |
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
-| 2 | Scene manifest schema, registry, voiceover, transitions | 🟨 in progress — schema, registry, voiceover, audio validation done; transitions + 60–90 s sample next |
+| 2 | Scene manifest schema, registry, voiceover, transitions | 🟨 in progress — schema, registry, voiceover, audio validation, transitions done; 60–90 s sample next |
 | 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ⬜ |
 | 4 | Claude Code production skills + approval workflow | ⬜ |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |

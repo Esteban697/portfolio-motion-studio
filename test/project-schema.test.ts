@@ -75,6 +75,22 @@ describe('project manifest schema', () => {
     }
   });
 
+  it('accepts every supported transition name', () => {
+    for (const transitionOut of ['cut', 'fade', 'light-fade', 'camera-push']) {
+      const m = mutableManifest();
+      firstScene(m).transitionOut = transitionOut;
+
+      expect(projectManifestSchema.safeParse(m).success).toBe(true);
+    }
+  });
+
+  it('rejects an unknown transition name', () => {
+    const m = mutableManifest();
+    firstScene(m).transitionOut = 'wipe';
+
+    expect(issuePaths(m)).toContain('scenes.0.transitionOut');
+  });
+
   it('rejects duplicate scene ids', () => {
     const m = mutableManifest();
     firstScene(m).id = 'outro';

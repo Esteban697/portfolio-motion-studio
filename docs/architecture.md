@@ -28,8 +28,8 @@ manifests or import project content.
 
 Frames are the only animation timebase. Seconds appear only in manifests and
 are converted with `secondsToFrames()` (`src/utils/timing.ts`), which
-validates its inputs. `SceneFade` derives its own length from the sequence
-duration rather than assuming it.
+validates its inputs. `SceneTransition` derives its own envelope length from
+the sequence duration rather than assuming it.
 
 `buildSceneTimeline()` (`src/utils/project.ts`) converts scene durations into
 contiguous frame ranges. Frames are rounded **per scene and then summed** —
@@ -88,6 +88,27 @@ scene window. Narration is attenuation-only (`volumeDb` ≤ 0, unity by default)
 
 Durations are reported, never stretched or padded automatically.
 
+## Transitions
+
+A transition is a pair of envelopes rather than an overlap: the outgoing scene
+exits with `transitionOut`, and the incoming scene enters with that same name.
+Each envelope is clipped to its own scene, so scene durations, narration sync
+and the total frame count stay exact.
+
+`src/transitions/transitions.ts` holds the specs and a pure
+`transitionEnvelope(name, phase, frame, durationInFrames)` function; it is
+unit-tested without rendering. `SceneTransition` applies the composed opacity,
+scale and veil.
+
+Rules that make it honest:
+
+- Transitions compress on short scenes (`min(frames, duration / 2)`) instead of
+  inverting curves or bleeding past the scene's halfway point.
+- The light veil is drawn **outside** the scene's opacity wrapper: it is a
+  light source, so dimming it with the scene would turn the bloom grey.
+- Audio is rendered outside the transition wrapper; opacity and scale must
+  never affect sound.
+
 ## Profiles
 
 `src/theme/dimensions.ts` defines composition profiles
@@ -120,9 +141,9 @@ hardcoded — changing `durationSeconds` in the manifest and re-rendering is
 sufficient.
 
 ```text
-0–4 s    intro       CinematicIntro   brand → eyebrow → 3-line headline → rule → subline
-4–8 s    principle   TitleStatement   index/label → statement with accented line → proof line
-8–10 s   outro       CinematicOutro   mark → name → tagline → URL pill → closing line
+0–4 s    intro       CinematicIntro   brand → eyebrow → 3-line headline → rule → subline   out: light-fade
+4–10 s   principle   TitleStatement   index/label → statement with accented line → proof  out: camera-push
+10–15.5  outro       CinematicOutro   mark → name → tagline → URL pill → closing line      out: fade
 ```
 
 Each scene is self-contained and reads only props, so it can be reused by any
@@ -140,7 +161,7 @@ composition.
 | Unknown fields rejected | Manifests are versioned; unknown data at v1 is a mistake, not forward compatibility |
 | System font stack | Offline renders, no font licensing/network risk; swap point documented |
 | CSS gradients/SVG for atmosphere and marks | No binary assets, editable, resolution-independent |
-| `SceneFade` for `cut`/`fade` | Minimal transition support now; richer transitions (light-fade, camera-push) land later in Phase 2 |
+| In-scene transition envelopes | Keeps every scene duration exact (no overlap), which keeps narration sync and validation math simple; a real timeline-transition library can replace the layer later without touching manifests |
 | Generated asset registry | Keeps originals in `projects/<id>/assets/` with no duplicated copies while still giving Remotion static imports |
 | FFprobe for audio facts | Reuses the delivery toolchain; no audio decoding inside the app |
 | Vitest for tests | Handles TSX and TS paths without custom config; tests cover schema, timeline, registry, timing |

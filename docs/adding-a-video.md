@@ -30,8 +30,11 @@ generic: no rendering code changes when you add a project.
    | `title` | human title used in tooling |
    | `profile` | `landscape-1080p` |
    | `brand` | `initials` (1–3 chars), `name`, `tagline`, `url` (no protocol) |
-   | `scenes` | non-empty list; each has `id`, `type`, `durationSeconds`, `content`, optional `voiceover` |
+   | `scenes` | non-empty list; each has `id`, `type`, `durationSeconds`, `content`, optional `voiceover`, optional `transitionOut` |
    | `narrative` | optional `logline` / `targetDurationSeconds` |
+
+   `transitionOut` names the transition leaving the scene: `cut` (default),
+   `fade`, `light-fade` or `camera-push`. The next scene enters with it.
 
    A scene's optional narration points at a project-relative file:
 
