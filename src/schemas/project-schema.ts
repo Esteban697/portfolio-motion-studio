@@ -450,6 +450,19 @@ const scenesSchema = z
     });
   });
 
+/**
+ * Human approval record. AI-generated material is a draft until a person
+ * explicitly approves it; `finalRender` gates the production render.
+ */
+export const approvalsSchema = z.strictObject({
+  facts: z.boolean().default(false),
+  script: z.boolean().default(false),
+  storyboard: z.boolean().default(false),
+  finalRender: z.boolean().default(false),
+});
+
+export type Approvals = z.infer<typeof approvalsSchema>;
+
 export const projectManifestSchema = z.strictObject({
   schemaVersion: z.literal(1, 'unsupported schemaVersion — this build supports version 1'),
   projectId: kebabId('projectId'),
@@ -465,6 +478,8 @@ export const projectManifestSchema = z.strictObject({
     .optional(),
   brand: brandSchema,
   scenes: scenesSchema,
+  /** Absent means nothing has been approved. */
+  approvals: approvalsSchema.optional(),
 });
 
 export type ProjectManifest = z.infer<typeof projectManifestSchema>;

@@ -201,6 +201,39 @@ describe('project manifest schema', () => {
 
     expect(() => parseProjectManifest(m)).toThrow(/Invalid project manifest:[\s\S]*at least one scene/);
   });
+
+  it('treats a manifest without approvals as nothing approved', () => {
+    const result = projectManifestSchema.safeParse(mutableManifest());
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.approvals).toBeUndefined();
+    }
+  });
+
+  it('defaults unset approval gates to false', () => {
+    const m = mutableManifest();
+    m.approvals = {facts: true};
+
+    const result = projectManifestSchema.safeParse(m);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.approvals).toEqual({
+        facts: true,
+        script: false,
+        storyboard: false,
+        finalRender: false,
+      });
+    }
+  });
+
+  it('rejects unknown approval keys', () => {
+    const m = mutableManifest();
+    m.approvals = {facts: true, marketing: true};
+
+    expect(projectManifestSchema.safeParse(m).success).toBe(false);
+  });
 });
 
 const timelineContent = {

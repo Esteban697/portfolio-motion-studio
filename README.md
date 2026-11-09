@@ -6,11 +6,11 @@ technical project videos from code.
 Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
-> **Status — Phase 3 complete.**
-> All seven scene types are implemented and every composition renders: a
-> 15.5 s pipeline sample, an 82 s narrated overview, and two 62–64 s project
-> templates. The templates contain clearly marked placeholder content and no
-> narration — they await real career and project material.
+> **Status — Phase 4 in progress.**
+> The four production skills and the approval gates are implemented and
+> enforced (`validate --final`). The first real workflow run — an analysis of
+> this repository — is drafted in `projects/studio-engineering/facts.md` and
+> awaits owner review.
 
 ---
 
@@ -50,6 +50,7 @@ npm run assets                 # regenerate the static asset registry
 npm run typecheck              # strict TypeScript check
 npm test                       # schema, timeline, registry, audio and asset tests
 npm run validate -- --project studio-sample   # validate a project manifest
+npm run validate -- --project studio-sample --final   # production approval gate
 ```
 
 `npm run assets` scans each manifest's voiceover paths and regenerates
@@ -95,6 +96,14 @@ recordings replace the placeholder copy.
 ## Project structure
 
 ```text
+.claude/
+├── CLAUDE.md                # project instructions for Claude Code
+└── skills/
+    ├── project-analyzer/SKILL.md
+    ├── script-writer/SKILL.md
+    ├── storyboard-generator/SKILL.md
+    └── video-producer/SKILL.md
+
 projects/
 ├── studio-sample/           # 15.5 s pipeline sample
 │   ├── manifest.json
@@ -226,6 +235,29 @@ timeline stays exact — transitions never overlap scenes or change duration.
 Short scenes compress their transitions automatically rather than inverting
 the curves.
 
+## Production skills and approvals
+
+Four Claude Code skills in `.claude/skills/` drive the process:
+
+| Skill | Produces |
+| --- | --- |
+| `project-analyzer` | A source-referenced `facts.md` from a repository |
+| `script-writer` | Scene-level narration and on-screen text |
+| `storyboard-generator` | `storyboard.md` + manifest, using existing scene types only |
+| `video-producer` | Validation, preview, inspection and the final render |
+
+AI output is a draft until the owner approves it. Approvals are recorded in the
+manifest:
+
+```json
+"approvals": { "facts": true, "script": true, "storyboard": true, "finalRender": false }
+```
+
+`npm run validate -- --project <id>` prints the gate state, and `--final`
+refuses to pass until all four gates are true — a production render cannot
+silently ship unapproved material. Skills never set an approval themselves and
+never publish. See [docs/approval-workflow.md](docs/approval-workflow.md).
+
 ## Licensing
 
 **Remotion is source-available, not OSI-approved open source.** It is free for
@@ -244,13 +276,14 @@ eligibility before further use. Full notes:
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
 | 2 | Scene manifest schema, registry, voiceover, transitions | ✅ complete |
 | 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ✅ complete — compositions render; template content awaits real material |
-| 4 | Claude Code production skills + approval workflow | ⬜ next |
+| 4 | Claude Code production skills + approval workflow | 🟨 in progress — skills and gates done; first real project in review |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |
 
 ## Documentation
 
 - [docs/architecture.md](docs/architecture.md) — layers, decisions, constraints
 - [docs/production-workflow.md](docs/production-workflow.md) — how a video gets made, approval gates
+- [docs/approval-workflow.md](docs/approval-workflow.md) — gates, records, enforcement, skills
 - [docs/visual-style-guide.md](docs/visual-style-guide.md) — palette, type, motion rules
 - [docs/adding-a-video.md](docs/adding-a-video.md) — create a new composition
 - [docs/licensing.md](docs/licensing.md) — Remotion license notes

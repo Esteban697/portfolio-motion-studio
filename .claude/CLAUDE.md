@@ -11,6 +11,7 @@ npm run assets                 # regenerate src/generated/project-assets.ts
 npm run typecheck              # strict TS check — run before claiming done
 npm test                       # vitest: schema, timeline, registry, audio, assets
 npm run validate -- --project studio-sample
+npm run validate -- --project studio-sample --final   # production approval gate
 npm run render:sample          # 1080p H.264 → out/
 npm run render:sample:preview  # 960×540 (--scale=0.5; H.264 needs even int dims)
 npm run still:sample           # poster frame
@@ -36,6 +37,10 @@ npm run still:sample           # poster frame
   silently trimmed or time-stretched.
 - Transitions are in-scene envelopes; they must never change scene duration or
   overlap scenes. Audio renders outside the transition wrapper.
+- Approvals are human decisions. Never set `approvals` gates to `true` in a
+  manifest unless the user explicitly approved that material; `validate --final`
+  is the production gate. AI content is a draft until then.
+- Never publish or upload. Skills produce drafts and reports only.
 - Renders must stay local, deterministic and offline (no webfonts, no network
   assets).
 - Never modify original recordings/screenshots; write derived files elsewhere.
@@ -45,13 +50,12 @@ npm run still:sample           # poster frame
 
 ## Status
 
-Phase 3 complete: seven scene types, pure layout modules, schema rules, 109
-tests, four registered compositions (15.5 s sample, 82 s narrated overview,
-64 s career-journey template, 62 s project-showcase template). The two
-templates contain explicit placeholders and no narration — they must not be
-treated as approved content. Next is Phase 4: project-analyzer, script-writer,
-storyboard-generator and video-producer skills with human approval gates. Do
-not jump ahead to social formats (Phase 5).
+Phase 4 in progress: four production skills (`.claude/skills/`) and manifest
+approval gates are implemented; `npm run validate -- --project <id> --final`
+enforces them, and `test/skills.test.ts` guards the skill contracts. A first
+real workflow run is drafted at `projects/studio-engineering/facts.md` and is
+awaiting owner review before the script stage. Do not advance a gate on the
+user's behalf.
 
 ## Remotion license
 

@@ -43,8 +43,13 @@ source material ──► AI analysis (draft) ──► facts.md ──┐
 5. **Publishing** — never automatic. No upload happens without explicit
    instruction.
 
+Gates 1–4 are recorded in the manifest's `approvals` object, and
+`npm run validate -- --project <id> --final` refuses to pass until all of them
+are `true`. Full detail: [approval-workflow.md](approval-workflow.md).
+
 AI output is a draft until approved. This applies to facts, copy, and design
-choices alike.
+choices alike. The skills that produce those drafts are in `.claude/skills/`:
+`project-analyzer`, `script-writer`, `storyboard-generator`, `video-producer`.
 
 ## Current workflow (Phase 2 in progress)
 
@@ -60,13 +65,13 @@ choices alike.
 Manifest validation also runs inside the app, so an invalid manifest stops the
 preview with the same readable errors instead of rendering a broken video.
 
-## Phase 3 status
+## Phase 4 status
 
-Complete. All seven scene types are implemented and both project compositions
-render: `CareerJourney` (64 s) and `ProjectShowcase` (62 s). Their content is
-explicitly placeholder and silent — approved facts, real screenshots and
-recordings still have to come from the owner before either is publishable.
-Phase 4 (Claude Code production skills) is next.
+In progress. The four production skills and the approval gates are
+implemented; `validate --final` enforces the gates. The first real workflow
+run is a facts draft for `studio-engineering`
+(`projects/studio-engineering/facts.md`), awaiting owner review before the
+script stage.
 
 ## Recording guidance
 

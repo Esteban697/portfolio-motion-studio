@@ -18,7 +18,7 @@ same inputs, a render must produce the same frames.
 | Presentation | `src/components/`, `src/theme/` | Visual language, animation, layout, registry | Contain project-specific facts |
 | Rendering | `src/Root.tsx`, `src/compositions/` | Composition registration, manifest → sequences | Scatter dimensions or fps across files |
 | Validation | `scripts/validate-project.ts`, `test/` | Schema, timeline math, narration presence/format/fit | Swallow failures |
-| AI assistance | `.claude/skills/` (Phase 4) | Drafts facts, scripts, storyboards | Publish or finalize without approval |
+| AI assistance | `.claude/skills/` | Drafts facts, scripts, storyboards; hands off at approval gates | Publish, approve on the user's behalf, or modify analyzed repos |
 
 Data flows one way: manifest → schema (validated once) → `ProjectVideo` →
 registry → components → frames. Components receive props and never read
@@ -108,6 +108,24 @@ Rules that make it honest:
   light source, so dimming it with the scene would turn the bloom grey.
 - Audio is rendered outside the transition wrapper; opacity and scale must
   never affect sound.
+
+## AI assistance and approval gates
+
+Four skills in `.claude/skills/` turn source material into drafts:
+`project-analyzer` → `facts.md`, `script-writer` → `script.md`,
+`storyboard-generator` → `storyboard.md` + manifest, `video-producer` →
+validation, preview and final render.
+
+Approval is data, not convention: the manifest carries an `approvals` object
+(`facts`, `script`, `storyboard`, `finalRender`), and `validate --final` fails
+unless every gate is `true`. An absent approvals object means nothing is
+approved. Skills may update a gate only after the user explicitly approves;
+they never set gates themselves and never publish.
+
+`test/skills.test.ts` keeps the skill documents honest: it checks the skill
+names and frontmatter, that the storyboard skill lists every supported scene
+type, and that the producer skill references the final-render gate and the
+no-publishing rule.
 
 ## Profiles
 

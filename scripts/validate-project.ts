@@ -2,6 +2,7 @@ import {existsSync} from 'node:fs';
 import {dirname, relative, resolve} from 'node:path';
 import {formatIssues, projectManifestSchema} from '../src/schemas/project-schema';
 import {profiles} from '../src/theme/dimensions';
+import {approvalLabels, evaluateApprovals} from '../src/utils/approvals';
 import {evaluateNarrationFit, probeAudio, type AudioInfo, type NarrationIssue} from '../src/utils/audio';
 import {buildSceneTimeline} from '../src/utils/project';
 import {readJsonFile} from '../src/utils/read-json';
@@ -9,18 +10,23 @@ import {readJsonFile} from '../src/utils/read-json';
 /**
  * Validates a project manifest before rendering.
  *
- * Phase 2 scope: JSON syntax, schema, scene ids, supported types, profile,
- * duration/frame math, and narration presence, format and fit.
+ * Checks JSON syntax, schema, scene ids, supported types, profile, duration
+ * and frame math, narration presence/format/fit, and approval gates. With
+ * `--final`, every approval gate must be explicitly set.
  */
 
 const USAGE = `Usage:
   npm run validate -- --project <project-id>
-  npm run validate -- --file <path/to/manifest.json>
+  npm run validate -- --project <project-id> --final
+  npm run validate -- --file <path/to/manifest.json> [--final]
+
+  --final  requires facts, script, storyboard and final-render approval
 
 Examples:
-  npm run validate -- --project studio-sample`;
+  npm run validate -- --project studio-sample
+  npm run validate -- --project career-journey --final`;
 
-type Args = {project?: string; file?: string};
+type Args = {project?: string; file?: string; final: boolean};
 
 function fail(message: string): never {
   console.error(`\n✗ ${message}\n`);
@@ -28,7 +34,7 @@ function fail(message: string): never {
 }
 
 const parseArgs = (argv: string[]): Args => {
-  const args: Args = {};
+  const args: Args = {final: false};
 
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
@@ -44,6 +50,8 @@ const parseArgs = (argv: string[]): Args => {
         args.file = value;
       }
       index++;
+    } else if (arg === '--final') {
+      args.final = true;
     } else if (arg === '--help' || arg === '-h') {
       console.log(USAGE);
       process.exit(0);
@@ -92,6 +100,18 @@ const main = (): void => {
     fail(
       `projectId "${project.projectId}" does not match folder name "${args.project}". ` +
         'Rename the folder or fix projectId so output paths stay predictable.',
+    );
+  }
+
+  const approvals = evaluateApprovals(project.approvals);
+
+  if (args.final && approvals.missing.length > 0) {
+    fail(
+      `Final render is blocked for "${project.projectId}".\n` +
+        `Missing explicit approval: ${approvals.missing
+          .map((key) => approvalLabels[key])
+          .join(', ')}.\n` +
+        'Set "approvals" in manifest.json only after a human has reviewed the material.',
     );
   }
 
@@ -146,6 +166,12 @@ const main = (): void => {
   console.log(`\nProject   ${project.projectId} — ${project.title}`);
   console.log(
     `Profile   ${profile.id} (${profile.width}×${profile.height} @ ${profile.fps} fps)`,
+  );
+  console.log(
+    `Approvals ${approvals.approved.length}/${approvals.approved.length + approvals.missing.length}` +
+      (approvals.missing.length > 0
+        ? ` — missing ${approvals.missing.map((key) => approvalLabels[key]).join(', ')}`
+        : ' — all gates approved'),
   );
   console.log(`Narration ${narration.size}/${timeline.length} scenes`);
   console.log(`Total     ${totalSeconds.toFixed(2)}s (${totalFrames} frames)\n`);
