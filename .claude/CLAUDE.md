@@ -8,6 +8,8 @@ Local-first Remotion pipeline for cinematic portfolio video. Read
 ```bash
 npm run dev                    # Remotion Studio
 npm run typecheck              # strict TS check — run before claiming done
+npm test                       # vitest: schema, timeline, registry, timing
+npm run validate -- --project studio-sample
 npm run render:sample          # 1080p H.264 → out/
 npm run render:sample:preview  # 960×540 (--scale=0.5; H.264 needs even int dims)
 npm run still:sample           # poster frame
@@ -15,11 +17,17 @@ npm run still:sample           # poster frame
 
 ## Invariants (do not violate)
 
-- Content lives in `src/content/` (later `projects/<id>/`). Components receive
-  props; they never import project content or hardcode facts.
+- Content lives in `projects/<id>/manifest.json` and is validated by
+  `src/schemas/project-schema.ts`. Components receive props; they never import
+  manifests or hardcode facts.
+- A new scene type needs: schema member, component, registry entry. The
+  registry is exhaustive — `npm run typecheck` enforces it.
 - Colors, type sizes, easings and dimensions come from `src/theme/`. No
   literals in components.
-- Frames are the timebase. Convert seconds only via `src/utils/timing.ts`.
+- Frames are the timebase. Convert seconds only via `src/utils/timing.ts`;
+  scene frames are rounded per scene and summed (`src/utils/project.ts`).
+- Manifests are strict: unknown fields are errors. Bump `schemaVersion` for
+  breaking changes.
 - Renders must stay local, deterministic and offline (no webfonts, no network
   assets).
 - Never modify original recordings/screenshots; write derived files elsewhere.
@@ -29,9 +37,11 @@ npm run still:sample           # poster frame
 
 ## Status
 
-Phase 1 complete (three scenes + verified 10 s 1080p MP4). Phase 2 is scene
-manifests, scene registry, voiceover, transitions. Do not jump ahead to the
-Claude Code production skills (Phase 4) or social formats (Phase 5).
+Phase 1 complete. Phase 2 in progress: manifest schema (Zod), exhaustive scene
+registry, manifest-driven composition, validation CLI and 33 tests are done.
+Remaining Phase 2: per-scene voiceover + audio validation, richer transitions,
+60–90 s sample. Do not jump ahead to the Claude Code production skills
+(Phase 4) or social formats (Phase 5).
 
 ## Remotion license
 

@@ -13,6 +13,12 @@ export type CompositionProfile = {
   readonly gutter: number;
 };
 
+/**
+ * Profiles a project manifest may select. Render-only sizes (preview scaling)
+ * are not listed: they are output options, not composition profiles.
+ */
+export const profileIds = ['landscape-1080p'] as const;
+
 export const profiles = {
   'landscape-1080p': {
     id: 'landscape-1080p',
@@ -30,7 +36,7 @@ export const profiles = {
   },
 } as const satisfies Record<string, CompositionProfile>;
 
-export type ProfileId = keyof typeof profiles;
+export type ProfileId = (typeof profileIds)[number];
 
 /** The production profile. Previews scale down from the same layout. */
 export const defaultProfile: CompositionProfile = profiles['landscape-1080p'];

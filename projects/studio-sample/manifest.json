@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "projectId": "studio-sample",
+  "title": "Studio Sample",
+  "profile": "landscape-1080p",
+  "narrative": {
+    "logline": "A ten-second demonstration of the Portfolio Motion Studio rendering pipeline.",
+    "targetDurationSeconds": 10
+  },
+  "brand": {
+    "initials": "PM",
+    "name": "Portfolio Motion Studio",
+    "tagline": "Cinematic video, produced like software.",
+    "url": "yourportfolio.dev"
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "cinematic-intro",
+      "durationSeconds": 4,
+      "transitionOut": "fade",
+      "content": {
+        "eyebrow": "Portfolio · 2026",
+        "headline": [
+          { "text": "Motion design," },
+          { "text": "produced like" },
+          { "text": "software.", "accent": true }
+        ],
+        "subline": "A deterministic, local-first pipeline for cinematic portfolio video.",
+        "chapter": "Prologue",
+        "index": "01",
+        "railLabel": "Intro"
+      }
+    },
+    {
+      "id": "principle",
+      "type": "title-statement",
+      "durationSeconds": 4,
+      "transitionOut": "fade",
+      "content": {
+        "index": "02",
+        "label": "The principle",
+        "lines": [
+          { "text": "AI proposes the story." },
+          { "text": "Deterministic code", "accent": true },
+          { "text": "controls every frame." }
+        ],
+        "footnote": "Content, assets and timing stay in versioned project data.",
+        "ghostNumeral": "02"
+      }
+    },
+    {
+      "id": "outro",
+      "type": "cinematic-outro",
+      "durationSeconds": 2,
+      "transitionOut": "fade",
+      "content": {
+        "kicker": "End of sample",
+        "closingLine": "Build once. Produce every video from the same pipeline."
+      }
+    }
+  ]
+}

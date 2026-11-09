@@ -46,21 +46,25 @@ source material ──► AI analysis (draft) ──► facts.md ──┐
 AI output is a draft until approved. This applies to facts, copy, and design
 choices alike.
 
-## Phase 1 (what works today)
+## Current workflow (Phase 2 in progress)
 
-1. Edit `src/content/sample.ts` (brand, headlines, statement, timings).
-2. `npm run dev` and review in Remotion Studio.
-3. `npm run typecheck`.
-4. `npm run render:sample:preview` for a fast look, then
-   `npm run render:sample` for the final.
+1. Create or edit `projects/<id>/manifest.json` (copy the studio sample).
+2. `npm run validate -- --project <id>` — fix schema, id or timeline issues.
+3. `npm run dev` and review in Remotion Studio.
+4. `npm run typecheck` and `npm test`.
+5. `npm run render:sample:preview` for a fast look, then the final render.
 
-## Phase 2 additions (planned)
+Manifest validation also runs inside the app, so an invalid manifest stops the
+preview with the same readable errors instead of rendering a broken video.
 
-- One `projects/<id>/manifest.json` per video, validated before render.
-- One WAV per scene in `projects/<id>/assets/voice/`.
-- `npm run validate -- --project <id>` checks schema, assets and audio.
-- Explicit check that narration fits its scene; mismatch is reported, not
-  silently stretched.
+## Phase 2 remaining (planned)
+
+- Per-scene voiceover: one WAV per scene in `projects/<id>/assets/voice/`.
+- Audio inspection with FFprobe (format, sample rate, duration) and explicit
+  narration-vs-scene duration checks — reported, not silently stretched.
+- Richer transitions (`light-fade`, `camera-push`) behind the existing
+  `transitionOut` field.
+- A 60–90 second sample using real or temporary narration.
 
 ## Recording guidance
 

@@ -3,7 +3,7 @@ import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {Backdrop} from './primitives/Backdrop';
 import {RevealText} from './primitives/RevealText';
 import {ScreenChrome} from './primitives/Chrome';
-import type {BrandContent, TitleStatementContent} from '../content/types';
+import type {BrandContent, TitleStatementContent} from '../schemas/project-schema';
 import {
   alpha,
   colors,

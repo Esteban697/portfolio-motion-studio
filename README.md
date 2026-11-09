@@ -6,10 +6,10 @@ technical project videos from code.
 Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
-> **Status — Phase 1 complete (rendering foundation).**
-> Three cinematic scenes render to a verified 10-second 1080p MP4. Scene
-> manifests, voiceover, timelines, diagrams and the AI production skills are
-> Phases 2–4 (see [Roadmap](#roadmap)).
+> **Status — Phase 2 in progress.**
+> Projects are now data: a validated `manifest.json` drives scene order,
+> durations and copy through an exhaustive scene registry. Voiceover and
+> richer transitions are the remaining Phase 2 work (see [Roadmap](#roadmap)).
 
 ---
 
@@ -42,7 +42,22 @@ npm run render:sample:preview  # 960×540 preview (scale 0.5) → out/cinematic-
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
 npm run typecheck              # strict TypeScript check
+npm test                       # schema, timeline, registry and timing tests
+npm run validate -- --project studio-sample   # validate a project manifest
 ```
+
+`npm run validate` checks JSON syntax, the manifest schema, scene ids, supported
+scene types, the profile and the frame timeline, and prints the scene table
+with total duration. Invalid manifests fail with one line per issue:
+
+```text
+✗ Invalid manifest: projects\studio-sample\manifest.json
+  - scenes.0.durationSeconds: Invalid input: expected number, received undefined
+  - scenes.0: Unrecognized key: "durationSecond"
+```
+
+The same validation runs when Remotion loads the project, so a broken manifest
+cannot render silently.
 
 The first render downloads Remotion's headless Chrome and bundles the project;
 later renders reuse both caches.
@@ -61,11 +76,19 @@ Preview: H.264 ·  960×540  · 30 fps · 10.000 s · 0.61 MB
 ## Project structure
 
 ```text
+projects/
+└── studio-sample/
+    └── manifest.json        # Brand, scenes, durations, on-screen copy
+
 src/
 ├── index.ts                 # Remotion entry point
-├── Root.tsx                 # Composition registry
+├── Root.tsx                 # Composition registry; validates the manifest once
 ├── compositions/
-│   └── CinematicSample.tsx  # Phase 1 sample: intro → statement → outro
+│   └── ProjectVideo.tsx     # Manifest → scene timeline → sequences
+├── scenes/
+│   └── registry.tsx         # Scene type → component, exhaustive by type
+├── schemas/
+│   └── project-schema.ts    # Zod manifest schema + inferred content types
 ├── components/
 │   ├── CinematicIntro.tsx
 │   ├── TitleStatement.tsx
@@ -76,12 +99,13 @@ src/
 │       ├── RevealText.tsx   # Masked, staggered line reveal
 │       ├── BrandMark.tsx    # SVG monogram plate
 │       └── SceneFade.tsx    # Fade-in/out scene envelope
-├── content/
-│   ├── types.ts             # Content-layer types (no React)
-│   └── sample.ts            # Placeholder content for the sample
 ├── theme/                   # Design tokens: color, type, motion, dimensions
 └── utils/
-    └── timing.ts            # Seconds ⇄ frames, scene progress
+    ├── timing.ts            # Seconds ⇄ frames, scene progress
+    └── project.ts           # Scene timeline and total duration
+
+scripts/validate-project.ts  # Manifest validation CLI
+test/                        # Vitest suites for schema, timeline, registry, timing
 ```
 
 The theme is the only place colors, fonts, sizes and easings are declared.
@@ -125,7 +149,7 @@ eligibility before further use. Full notes:
 | --- | --- | --- |
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
-| 2 | Scene manifest schema, registry, voiceover, transitions | ⬜ next |
+| 2 | Scene manifest schema, registry, voiceover, transitions | 🟨 in progress — schema, registry, validation, tests done; voiceover + transitions next |
 | 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ⬜ |
 | 4 | Claude Code production skills + approval workflow | ⬜ |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |

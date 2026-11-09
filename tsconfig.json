@@ -19,5 +19,5 @@
     "verbatimModuleSyntax": true,
     "types": ["node"]
   },
-  "include": ["src", "remotion.config.ts", "scripts"]
+  "include": ["src", "test", "remotion.config.ts", "scripts", "projects/**/*.json"]
 }

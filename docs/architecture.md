@@ -12,30 +12,54 @@ same inputs, a render must produce the same frames.
 
 | Layer | Lives in | Owns | Must not |
 | --- | --- | --- | --- |
-| Content | `src/content/` (later `projects/<id>/`) | Facts, headlines, scene text, durations, asset paths | Contain executable React or hardcoded facts inside components |
+| Content | `projects/<id>/manifest.json` | Facts, headlines, scene text, durations, asset paths | Contain executable code |
+| Schema | `src/schemas/` | Data contracts (Zod), inferred TypeScript types, readable errors | Depend on React or components |
 | Asset | `projects/<id>/assets/`, `public/` | Voice, music, screenshots, diagrams | Be overwritten by processing steps |
-| Presentation | `src/components/`, `src/theme/` | Visual language, animation, layout | Contain project-specific facts |
-| Rendering | `src/Root.tsx`, `src/compositions/` | Composition registration, scene sequencing | Scatter dimensions or fps across files |
-| Validation | `scripts/validate-project.ts` (Phase 2) | Schema, assets, durations, preflight | Swallow failures |
+| Presentation | `src/components/`, `src/theme/` | Visual language, animation, layout, registry | Contain project-specific facts |
+| Rendering | `src/Root.tsx`, `src/compositions/` | Composition registration, manifest → sequences | Scatter dimensions or fps across files |
+| Validation | `scripts/validate-project.ts`, `test/` | Schema, timeline math, future asset/audio checks | Swallow failures |
 | AI assistance | `.claude/skills/` (Phase 4) | Drafts facts, scripts, storyboards | Publish or finalize without approval |
 
-Data flows one way: content → composition → components → frames. Components
-never reach back into content modules directly; they receive props.
+Data flows one way: manifest → schema (validated once) → `ProjectVideo` →
+registry → components → frames. Components receive props and never read
+manifests or import project content.
 
 ## Timebase
 
-Frames are the only animation timebase. Seconds appear only in project data
-and are converted with `secondsToFrames()` (`src/utils/timing.ts`), which
+Frames are the only animation timebase. Seconds appear only in manifests and
+are converted with `secondsToFrames()` (`src/utils/timing.ts`), which
 validates its inputs. `SceneFade` derives its own length from the sequence
 duration rather than assuming it.
 
-Scene boundaries are declared once, in the composition, from content-layer
-durations:
+`buildSceneTimeline()` (`src/utils/project.ts`) converts scene durations into
+contiguous frame ranges. Frames are rounded **per scene and then summed** —
+rounding the total in seconds can differ by a frame and desynchronise the
+composition length from its sequences. The composition's registered
+`durationInFrames` is computed by the same function, and a scene that rounds
+to zero frames is rejected.
 
-```ts
-const introFrames = secondsToFrames(timing.introSeconds, fps);
-<Sequence from={introFrames} durationInFrames={statementFrames} />
+## Manifest → frames
+
+```text
+projects/<id>/manifest.json
+        │  parseProjectManifest() at startup (throws readable issues)
+        ▼
+ProjectManifest (typed, validated)
+        │  buildSceneTimeline(scenes, fps)
+        ▼
+[{scene, from, durationInFrames}, …]
+        │  renderScene(scene, brand) → registry lookup
+        ▼
+<Sequence> per scene → component → frames
 ```
+
+The registry (`src/scenes/registry.tsx`) is a mapped type over `SceneType`:
+adding a scene type to the schema without a registry entry is a compile error,
+and each entry accepts only its own content type. `renderScene` contains one
+cast, justified by the discriminated union tying `content` to `type`.
+
+Unknown fields in a manifest are errors (strict objects). Manifests are
+versioned with `schemaVersion`; any breaking change bumps it.
 
 ## Profiles
 
@@ -61,15 +85,17 @@ validation — don't "fix" this with a custom scale.
 
 Components consume tokens; they never hardcode color or size literals.
 
-## Composition structure (Phase 1)
+## Sample structure
 
-`CinematicSample` sequences three scene components with `Sequence` and wraps
-each in `SceneFade`:
+`CinematicSample` is registered in `src/Root.tsx` from the `studio-sample`
+manifest: three scenes, 10 s, 300 frames at 30 fps. Nothing in components is
+hardcoded — changing `durationSeconds` in the manifest and re-rendering is
+sufficient.
 
 ```text
-0–4 s    CinematicIntro   brand → eyebrow → 3-line headline → rule → subline
-4–8 s    TitleStatement   index/label → statement with accented line → proof line
-8–10 s   CinematicOutro   mark → name → tagline → URL pill → closing line
+0–4 s    intro       CinematicIntro   brand → eyebrow → 3-line headline → rule → subline
+4–8 s    principle   TitleStatement   index/label → statement with accented line → proof line
+8–10 s   outro       CinematicOutro   mark → name → tagline → URL pill → closing line
 ```
 
 Each scene is self-contained and reads only props, so it can be reused by any
@@ -81,11 +107,15 @@ composition.
 | --- | --- |
 | Remotion 4.x + React + TypeScript | Programmatic, componentized, deterministic; owner chose it over Motion Canvas (license trade-off documented) |
 | Frame-based timebase | Remotion-native, deterministic, easy to validate |
+| Zod for the manifest schema | Types are inferred from the schema (single source of truth) and the same definition produces runtime errors for hand-edited JSON |
+| Strict objects in the schema | A typo in a manifest must fail loudly, not silently drop a value |
+| Exhaustive registry over a generic interpreter | A typed type → component map is simpler and safer than a scene language; the brief explicitly warns against an over-general interpreter |
+| Unknown fields rejected | Manifests are versioned; unknown data at v1 is a mistake, not forward compatibility |
 | System font stack | Offline renders, no font licensing/network risk; swap point documented |
 | CSS gradients/SVG for atmosphere and marks | No binary assets, editable, resolution-independent |
-| `SceneFade` instead of a transition library | Phase 1 needs one simple boundary; a transition layer belongs in Phase 2 |
-| No schema library yet | Manifest schema arrives with Phase 2; adding Zod now would be an empty abstraction |
-| Content in `src/content/` now, `projects/<id>/` in Phase 2 | Keeps the sample honest without inventing the project file format early |
+| `SceneFade` for `cut`/`fade` | Minimal transition support now; richer transitions (light-fade, camera-push) land later in Phase 2 |
+| Vitest for tests | Handles TSX and TS paths without custom config; tests cover schema, timeline, registry, timing |
+| Validation runs in the app and in a CLI | The render fails before producing frames, and CI/terminal gets the same messages |
 
 ## Constraints to preserve
 

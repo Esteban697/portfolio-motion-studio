@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
 import {Backdrop} from './primitives/Backdrop';
 import {BrandMark} from './primitives/BrandMark';
-import type {BrandContent, CinematicOutroContent} from '../content/types';
+import type {BrandContent, CinematicOutroContent} from '../schemas/project-schema';
 import {
   alpha,
   colors,

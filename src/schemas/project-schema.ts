@@ -1,0 +1,217 @@
+import {z} from 'zod';
+import {profileIds} from '../theme/dimensions';
+
+/**
+ * Project manifest schema — the contract between content and rendering.
+ *
+ * A manifest is versioned JSON with no executable code. Everything a
+ * composition needs (brand, scene order, durations, on-screen copy) lives
+ * here; components receive it as props and never read manifests directly.
+ *
+ * Objects are strict: an unknown field is an error, because a typo in a
+ * hand-edited manifest should fail loudly rather than silently drop data.
+ * Any schema change must bump `schemaVersion`.
+ */
+
+/** Lowercase kebab-case identifier used for project and scene ids. */
+const kebabId = (label: string) =>
+  z
+    .string()
+    .trim()
+    .min(1, `${label} is required`)
+    .max(64, `${label} must be at most 64 characters`)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, `${label} must be lowercase kebab-case, e.g. "scene-01"`);
+
+const displayText = (label: string, max = 120) =>
+  z
+    .string()
+    .trim()
+    .min(1, `${label} is required`)
+    .max(max, `${label} must be at most ${max} characters`);
+
+export const brandSchema = z.strictObject({
+  /** Monogram for the brand plate, 1–3 characters. */
+  initials: z
+    .string()
+    .trim()
+    .min(1, 'initials are required')
+    .max(3, 'initials must be 1–3 characters'),
+  name: displayText('name', 80),
+  tagline: displayText('tagline', 160),
+  /** Display URL only — no protocol. */
+  url: z
+    .string()
+    .trim()
+    .min(1, 'url is required')
+    .max(80, 'url must be at most 80 characters')
+    .refine((value) => !/^[a-z]+:\/\//i.test(value), {
+      message: 'url must be a display URL without protocol, e.g. "yourportfolio.dev"',
+    }),
+});
+
+export type BrandContent = z.infer<typeof brandSchema>;
+
+/** A designed line with an optional cyan accent. */
+const accentLine = (label: string) =>
+  z.strictObject({
+    text: displayText(`${label} text`, 90),
+    accent: z.boolean().optional(),
+  });
+
+/** A scene may highlight at most one line in cyan. */
+const atMostOneAccent = (lines: {accent?: boolean}[], ctx: z.RefinementCtx) => {
+  const accents = lines.filter((line) => line.accent === true).length;
+  if (accents > 1) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'at most one line may be accented — cyan is reserved for the single key idea',
+    });
+  }
+};
+
+export const cinematicIntroContentSchema = z.strictObject({
+  eyebrow: displayText('eyebrow', 60),
+  headline: z
+    .array(accentLine('headline'))
+    .min(1, 'headline needs at least one line')
+    .max(4, 'headline supports at most 4 lines at 1080p')
+    .superRefine(atMostOneAccent),
+  subline: displayText('subline', 200),
+  chapter: displayText('chapter', 40),
+  index: displayText('index', 3),
+  railLabel: displayText('railLabel', 30),
+});
+
+export type CinematicIntroContent = z.infer<typeof cinematicIntroContentSchema>;
+
+export const titleStatementContentSchema = z.strictObject({
+  index: displayText('index', 3),
+  label: displayText('label', 40),
+  lines: z
+    .array(accentLine('statement'))
+    .min(1, 'statement needs at least one line')
+    .max(4, 'statement supports at most 4 lines at 1080p')
+    .superRefine(atMostOneAccent),
+  footnote: displayText('footnote', 160),
+  ghostNumeral: displayText('ghostNumeral', 3),
+});
+
+export type TitleStatementContent = z.infer<typeof titleStatementContentSchema>;
+
+export const cinematicOutroContentSchema = z.strictObject({
+  kicker: displayText('kicker', 40),
+  closingLine: displayText('closingLine', 160),
+});
+
+export type CinematicOutroContent = z.infer<typeof cinematicOutroContentSchema>;
+
+/** Fields shared by every scene type. */
+const sceneBase = {
+  id: kebabId('scene id'),
+  /**
+   * Scene length in seconds. Converted to frames through the shared timing
+   * utility, never used as raw seconds by components.
+   */
+  durationSeconds: z
+    .number()
+    .positive('durationSeconds must be greater than 0')
+    .max(600, 'durationSeconds must be at most 600'),
+  /**
+   * How the scene leaves. `fade` dips through black at the scene's edges;
+   * `cut` is hard. Richer transitions arrive later in Phase 2.
+   */
+  transitionOut: z.enum(['cut', 'fade']).default('cut'),
+};
+
+export const cinematicIntroSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('cinematic-intro'),
+  content: cinematicIntroContentSchema,
+});
+
+export const titleStatementSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('title-statement'),
+  content: titleStatementContentSchema,
+});
+
+export const cinematicOutroSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('cinematic-outro'),
+  content: cinematicOutroContentSchema,
+});
+
+/**
+ * Every scene type the renderer knows. Adding a type requires a component,
+ * a registry entry, and a schema member — TypeScript enforces the registry.
+ */
+export const supportedSceneTypes = ['cinematic-intro', 'title-statement', 'cinematic-outro'] as const;
+
+export const sceneSchema = z.discriminatedUnion('type', [
+  cinematicIntroSceneSchema,
+  titleStatementSceneSchema,
+  cinematicOutroSceneSchema,
+]);
+
+export type Scene = z.infer<typeof sceneSchema>;
+export type SceneType = Scene['type'];
+/** Narrows a scene union member by its `type` literal. */
+export type SceneOfType<K extends SceneType> = Extract<Scene, {type: K}>;
+
+const scenesSchema = z
+  .array(sceneSchema)
+  .min(1, 'a project needs at least one scene')
+  .superRefine((scenes, ctx) => {
+    const seen = new Set<string>();
+    scenes.forEach((scene, index) => {
+      if (seen.has(scene.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `duplicate scene id "${scene.id}"`,
+          path: [index, 'id'],
+        });
+      }
+      seen.add(scene.id);
+    });
+  });
+
+export const projectManifestSchema = z.strictObject({
+  schemaVersion: z.literal(1, 'unsupported schemaVersion — this build supports version 1'),
+  projectId: kebabId('projectId'),
+  title: displayText('title', 100),
+  profile: z.enum(profileIds, `profile must be one of: ${profileIds.join(', ')}`),
+  narrative: z
+    .strictObject({
+      /** One-sentence summary of the video's story. */
+      logline: z.string().trim().max(300).optional(),
+      /** Intentional length; the validation script reports drift, never enforces. */
+      targetDurationSeconds: z.number().positive().max(600).optional(),
+    })
+    .optional(),
+  brand: brandSchema,
+  scenes: scenesSchema,
+});
+
+export type ProjectManifest = z.infer<typeof projectManifestSchema>;
+
+/** Formats Zod issues as one line per problem, with JSON-style paths. */
+export const formatIssues = (error: z.ZodError): string =>
+  error.issues
+    .map((issue) => {
+      const path = issue.path.length > 0 ? issue.path.join('.') : '(root)';
+      return `  - ${path}: ${issue.message}`;
+    })
+    .join('\n');
+
+/**
+ * Parses unknown input (e.g. imported JSON) into a manifest, throwing a
+ * readable error. Used at the render boundary so invalid content fails at
+ * startup instead of rendering a broken video.
+ */
+export const parseProjectManifest = (input: unknown): ProjectManifest => {
+  const result = projectManifestSchema.safeParse(input);
+  if (!result.success) {
+    throw new Error(`Invalid project manifest:\n${formatIssues(result.error)}`);
+  }
+  return result.data;
+};
