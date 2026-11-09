@@ -7,10 +7,9 @@ Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
 > **Status — Phase 4 in progress.**
-> The four production skills and the approval gates are implemented and
-> enforced (`validate --final`). The first real workflow run — an analysis of
-> this repository — is drafted in `projects/studio-engineering/facts.md` and
-> awaits owner review.
+> Skills and gates are implemented. The first real run has passed Gate 1: the
+> career-story facts are approved and the 80-second English script is drafted
+> for Gate 2 review in `projects/studio-engineering/script.md`.
 
 ---
 

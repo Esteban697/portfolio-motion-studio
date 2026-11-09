@@ -1,18 +1,18 @@
 ---
 project: studio-engineering
-status: draft
+status: approved
+approved: 2026-11-09
 analyzed: 2026-11-09
 sources:
   - repository: portfolio-motion-studio (local working copy)
   - profile: projects/studio-engineering/profile.md (owner-supplied CV source; kept local)
 ---
 
-# Esteban Struve — engineering profile facts (draft)
+# Esteban Struve — engineering profile facts
 
-Source-of-truth draft for a personal engineering portfolio video, with this
-repository as one featured artifact. Every claim is tied to a source.
-**Not approved** — do not use for a production render until the owner reviews
-it and the `facts` gate is set.
+Approved source of truth (Gate 1, 2026-11-09) for the career-story video
+(option A), with this repository as a closing artifact. Every claim is tied to
+a source; anything not stated here must not be asserted.
 
 ## Snapshot
 
@@ -163,9 +163,9 @@ it and the `facts` gate is set.
 
 ## Assumptions
 
-- The intended video is a personal engineering portfolio piece, with the studio
-  as one featured artifact — inferred from the profile being added to this
-  project. Not stated explicitly.
+- **Video focus (decided 2026-11-09): option A — career story.** Timeline,
+  selected impact and current focus, with the studio as the closing proof of
+  hands-on work. Chosen by the owner.
 - Employer names and dates are as supplied in profile.md and may be shown on
   camera unless the owner says otherwise.
 - Featured-project outcomes are as stated in profile.md; they were not
@@ -173,13 +173,15 @@ it and the `facts` gate is set.
 
 ## Open questions
 
-- Is the video's focus the career story, the studio, or one featured project
-  (Web Agent, E-Commerce Chatbot, AI Agents 3D Sandbox)?
-- Which items are cleared for on-camera: employer names, Madrid, portfolio URL,
-  LinkedIn?
-- Narration language and recording schedule.
+- Recording schedule: which scenes first, and when.
 - Is a 9:16 or 1:1 format wanted after the landscape version stabilises?
   [docs/architecture.md (Profiles)]
+
+## Resolved decisions
+
+- On-camera items: approved as-is — employer names, Madrid, portfolio URL,
+  LinkedIn, and the two-months-to-two-weeks outcome (2026-11-09).
+- Narration language: English (2026-11-09).
 
 ## Must not appear on camera
 

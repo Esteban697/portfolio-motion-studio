@@ -67,11 +67,11 @@ preview with the same readable errors instead of rendering a broken video.
 
 ## Phase 4 status
 
-In progress. The four production skills and the approval gates are
-implemented; `validate --final` enforces the gates. The first real workflow
-run is a facts draft for `studio-engineering`
-(`projects/studio-engineering/facts.md`), awaiting owner review before the
-script stage.
+In progress. The four production skills and approval gates are implemented;
+`validate --final` enforces the gates. The first real run has passed Gate 1
+(career-story facts approved on 2026-11-09) and Gate 2 is pending: an
+80-second English script is drafted in
+`projects/studio-engineering/script.md`.
 
 ## Recording guidance
 
