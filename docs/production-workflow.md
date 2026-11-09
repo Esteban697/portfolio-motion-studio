@@ -62,11 +62,11 @@ preview with the same readable errors instead of rendering a broken video.
 
 ## Phase 3 status
 
-The reusable scene set is complete: intro, statement, animated timeline,
-architecture diagram, image showcase, data flow and outro — all demonstrated
-in the 82 s overview. Remaining: the career-journey and project-showcase
-compositions, which need the owner's real career facts, project material and
-recordings.
+Complete. All seven scene types are implemented and both project compositions
+render: `CareerJourney` (64 s) and `ProjectShowcase` (62 s). Their content is
+explicitly placeholder and silent — approved facts, real screenshots and
+recordings still have to come from the owner before either is publishable.
+Phase 4 (Claude Code production skills) is next.
 
 ## Recording guidance
 

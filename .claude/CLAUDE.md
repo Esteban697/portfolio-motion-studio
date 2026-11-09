@@ -45,13 +45,13 @@ npm run still:sample           # poster frame
 
 ## Status
 
-Phase 2 complete. Phase 3 in progress: all seven scene types are implemented
-(intro, statement, animated timeline, architecture diagram, image showcase,
-data flow, outro) with pure layout modules, schema rules, registry entries and
-107 tests, and all appear in the 82 s studio-overview sample. Remaining:
-career-journey and project-showcase compositions, which need real user
-material. Do not jump ahead to the Claude Code production skills (Phase 4) or
-social formats (Phase 5).
+Phase 3 complete: seven scene types, pure layout modules, schema rules, 109
+tests, four registered compositions (15.5 s sample, 82 s narrated overview,
+64 s career-journey template, 62 s project-showcase template). The two
+templates contain explicit placeholders and no narration — they must not be
+treated as approved content. Next is Phase 4: project-analyzer, script-writer,
+storyboard-generator and video-producer skills with human approval gates. Do
+not jump ahead to social formats (Phase 5).
 
 ## Remotion license
 

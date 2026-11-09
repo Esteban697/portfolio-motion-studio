@@ -5,6 +5,10 @@ generic: no rendering code changes when you add a project.
 
 ## A. New project (works today)
 
+**Fastest start:** copy `projects/career-journey` or
+`projects/project-showcase`, rename the folder and `projectId`, then replace
+the placeholder copy. Their READMEs list every field to change.
+
 1. **Create the project directory**
 
    ```text

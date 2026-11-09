@@ -2,6 +2,7 @@ import {existsSync, readdirSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 import {describe, expect, it} from 'vitest';
 import {projectManifestSchema, type ProjectManifest} from '../src/schemas/project-schema';
+import {renderScene} from '../src/scenes/registry';
 import {resolveProjectAsset} from '../src/utils/assets';
 import {calculateProjectDurationInFrames} from '../src/utils/project';
 import {readJsonFile} from '../src/utils/read-json';
@@ -32,6 +33,8 @@ describe('project folder conventions', () => {
 
   it('loads every project folder', () => {
     expect(projects.map((entry) => entry.id).sort()).toEqual([
+      'career-journey',
+      'project-showcase',
       'studio-overview',
       'studio-sample',
     ]);
@@ -69,5 +72,25 @@ describe('project folder conventions', () => {
     const seconds = calculateProjectDurationInFrames(overview.project.scenes, 30) / 30;
     expect(seconds).toBeGreaterThanOrEqual(60);
     expect(seconds).toBeLessThanOrEqual(90);
+  });
+
+  it('builds a component element for every scene in every project', () => {
+    for (const {project} of projects) {
+      for (const scene of project.scenes) {
+        expect(renderScene(scene, project.brand, project.projectId).type).toBeTruthy();
+      }
+    }
+  });
+
+  it('keeps the template projects free of synthesised narration', () => {
+    // Templates must not ship voice tracks claiming facts that were never
+    // approved. Narration is added by the owner after replacing the copy.
+    for (const id of ['career-journey', 'project-showcase']) {
+      const project = projects.find((entry) => entry.id === id);
+      expect(project).toBeDefined();
+      if (!project) continue;
+
+      expect(project.project.scenes.every((scene) => scene.voiceover === undefined)).toBe(true);
+    }
   });
 });

@@ -181,6 +181,16 @@ statement type appears twice). Adding a scene type required a schema member, a
 component, a registry entry and a layout test — no changes to the composition
 or manifest machinery.
 
+`CareerJourney` (64 s) and `ProjectShowcase` (62 s) are templates. They are
+structurally complete manifests whose copy is explicitly placeholder, with no
+narration and a concept-labelled placeholder image. They prove both
+compositions render without inventing facts or synthesising a voice track;
+real content replaces the copy and adds recordings.
+
+Each project is one `registerProject()` line in `src/Root.tsx`; compositions
+are static because Remotion requires them to be, but everything inside them is
+data.
+
 ## Decisions and their reasons
 
 | Decision | Reason |

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "projectId": "project-showcase",
+  "title": "Technical Project Showcase (template)",
+  "profile": "landscape-1080p",
+  "narrative": {
+    "logline": "Template for a technical project explainer. Replace every placeholder with approved facts, diagrams and screenshots.",
+    "targetDurationSeconds": 62
+  },
+  "brand": {
+    "initials": "PX",
+    "name": "Project Name",
+    "tagline": "One line about the problem it solves.",
+    "url": "yourportfolio.dev/project"
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "cinematic-intro",
+      "durationSeconds": 10,
+      "transitionOut": "light-fade",
+      "content": {
+        "eyebrow": "Project showcase · Template",
+        "headline": [
+          { "text": "A project," },
+          { "text": "explained" },
+          { "text": "clearly.", "accent": true }
+        ],
+        "subline": "Replace the copy, diagrams and screenshots with your own.",
+        "chapter": "Opening",
+        "index": "01",
+        "railLabel": "Intro"
+      }
+    },
+    {
+      "id": "problem",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "index": "02",
+        "label": "The problem",
+        "lines": [
+          { "text": "Who needed this," },
+          { "text": "and what was" },
+          { "text": "missing.", "accent": true }
+        ],
+        "footnote": "Describe the real need. Do not invent outcomes.",
+        "ghostNumeral": "02"
+      }
+    },
+    {
+      "id": "architecture",
+      "type": "architecture-diagram",
+      "durationSeconds": 11,
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "03",
+        "label": "Architecture",
+        "chapter": "System",
+        "headline": "How it works.",
+        "diagram": {
+          "nodes": [
+            { "id": "interface", "label": "Interface", "sublabel": "Web · chat", "column": 0, "row": 0 },
+            { "id": "service", "label": "Service", "sublabel": "API layer", "column": 1, "row": 0 },
+            { "id": "knowledge", "label": "Knowledge", "sublabel": "Vector store", "column": 1, "row": 1 },
+            { "id": "agent", "label": "Agent", "sublabel": "Tools · model", "column": 2, "row": 0, "accent": true },
+            { "id": "response", "label": "Response", "sublabel": "Grounded answer", "column": 3, "row": 0 }
+          ],
+          "edges": [
+            { "from": "interface", "to": "service" },
+            { "from": "knowledge", "to": "agent" },
+            { "from": "service", "to": "agent" },
+            { "from": "agent", "to": "response", "accent": true }
+          ]
+        },
+        "footnote": "Replace with your real system; label concepts clearly."
+      }
+    },
+    {
+      "id": "request-path",
+      "type": "data-flow",
+      "durationSeconds": 10,
+      "transitionOut": "light-fade",
+      "content": {
+        "index": "04",
+        "label": "The request path",
+        "chapter": "Data flow",
+        "headline": "From question to answer.",
+        "stages": [
+          { "id": "question", "label": "Question", "sublabel": "User input" },
+          { "id": "retrieval", "label": "Retrieval", "sublabel": "Relevant context" },
+          { "id": "reasoning", "label": "Reasoning", "sublabel": "Tool calls" },
+          { "id": "answer", "label": "Answer", "sublabel": "Cited response" }
+        ],
+        "footnote": "An illustrative flow is not a runtime trace."
+      }
+    },
+    {
+      "id": "experience",
+      "type": "image-showcase",
+      "durationSeconds": 11,
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "05",
+        "label": "The experience",
+        "chapter": "Interface",
+        "headline": "Show the interface.",
+        "images": [
+          {
+            "src": "assets/images/screenshot-placeholder.svg",
+            "caption": "Add a real screenshot of the product",
+            "kind": "concept"
+          }
+        ],
+        "footnote": "Screenshots must come from the real product."
+      }
+    },
+    {
+      "id": "outro",
+      "type": "cinematic-outro",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "kicker": "End of template",
+        "closingLine": "Replace this template with your project."
+      }
+    }
+  ]
+}

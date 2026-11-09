@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "projectId": "career-journey",
+  "title": "Career Journey (template)",
+  "profile": "landscape-1080p",
+  "narrative": {
+    "logline": "Template for a 60-90 second career story. Replace every placeholder with approved facts before rendering.",
+    "targetDurationSeconds": 64
+  },
+  "brand": {
+    "initials": "YN",
+    "name": "Your Name",
+    "tagline": "Your role · your craft · your story.",
+    "url": "yourportfolio.dev"
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "cinematic-intro",
+      "durationSeconds": 11,
+      "transitionOut": "light-fade",
+      "content": {
+        "eyebrow": "Career journey · Template",
+        "headline": [
+          { "text": "A career," },
+          { "text": "told in" },
+          { "text": "frames.", "accent": true }
+        ],
+        "subline": "Replace this template with your own milestones, projects and recordings.",
+        "chapter": "Opening",
+        "index": "01",
+        "railLabel": "Intro"
+      }
+    },
+    {
+      "id": "background",
+      "type": "animated-timeline",
+      "durationSeconds": 12,
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "02",
+        "label": "Background",
+        "chapter": "Timeline",
+        "headline": "The path so far.",
+        "milestones": [
+          { "marker": "20XX", "title": "Add your first role", "detail": "Company · title · dates" },
+          { "marker": "20XX", "title": "Add your next step", "detail": "What changed and why" },
+          { "marker": "20XX", "title": "Add today", "detail": "Your current focus" }
+        ],
+        "footnote": "Only use dates, titles and achievements you can verify."
+      }
+    },
+    {
+      "id": "evolution",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "index": "03",
+        "label": "The evolution",
+        "lines": [
+          { "text": "Replace this" },
+          { "text": "career narrative", "accent": true },
+          { "text": "with your own." }
+        ],
+        "footnote": "Draft copy is not approved copy.",
+        "ghostNumeral": "03"
+      }
+    },
+    {
+      "id": "projects",
+      "type": "image-showcase",
+      "durationSeconds": 11,
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "04",
+        "label": "Projects",
+        "chapter": "Selected work",
+        "headline": "Show the work.",
+        "images": [
+          {
+            "src": "assets/images/screenshot-placeholder.svg",
+            "caption": "Add a real project screenshot or diagram",
+            "kind": "concept"
+          }
+        ],
+        "footnote": "Screenshots must come from the real project."
+      }
+    },
+    {
+      "id": "leadership",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "index": "05",
+        "label": "Leadership",
+        "lines": [
+          { "text": "What you lead." },
+          { "text": "What you're building.", "accent": true },
+          { "text": "Where you're going." }
+        ],
+        "footnote": "Replace with approved facts — no invented metrics.",
+        "ghostNumeral": "05"
+      }
+    },
+    {
+      "id": "outro",
+      "type": "cinematic-outro",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "kicker": "End of template",
+        "closingLine": "Replace this template with your story."
+      }
+    }
+  ]
+}

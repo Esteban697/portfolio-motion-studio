@@ -6,11 +6,11 @@ technical project videos from code.
 Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
-> **Status — Phase 3 in progress.**
-> The full reusable scene set is implemented: intro, statement, animated
-> timeline, architecture diagram, image showcase, data flow and outro. The
-> 82-second overview exercises every one. Remaining Phase 3: the career-journey
-> and project-showcase compositions, which need real project material.
+> **Status — Phase 3 complete.**
+> All seven scene types are implemented and every composition renders: a
+> 15.5 s pipeline sample, an 82 s narrated overview, and two 62–64 s project
+> templates. The templates contain clearly marked placeholder content and no
+> narration — they await real career and project material.
 
 ---
 
@@ -42,6 +42,8 @@ npm run render:sample          # 1920×1080 H.264 MP4 → out/cinematic-sample-1
 npm run render:sample:preview  # 960×540 preview (scale 0.5) → out/cinematic-sample-preview.mp4
 npm run render:overview        # 82 s overview → out/studio-overview-1080p.mp4
 npm run render:overview:preview
+npm run render:career          # 64 s template → out/career-journey-1080p.mp4
+npm run render:project         # 62 s template → out/project-showcase-1080p.mp4
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
 npm run assets                 # regenerate the static asset registry
@@ -79,11 +81,14 @@ Both samples were rendered and inspected with FFprobe:
 Sample    H.264 · 1920×1080 · 30 fps · 15.500 s ·  2.65 MB | AAC 48 kHz stereo
 Preview   H.264 ·  960×540  · 30 fps · 15.509 s ·  1.31 MB | AAC 48 kHz
 Overview  H.264 · 1920×1080 · 30 fps · 82.005 s · 11.94 MB | AAC 48 kHz stereo
+Career    H.264 · 1920×1080 · 30 fps · 64.000 s ·  6.02 MB | template, no audio
+Project   H.264 · 1920×1080 · 30 fps · 62.000 s ·  6.04 MB | template, no audio
 ```
 
-Silence analysis of each file places speech at every scene boundary: 0.0,
-4.1 and 10.1 s in the sample; 0, 11.1, 21.1, 31.1, 41.1, 51.6, 61.6 and
-71.6 s in the overview.
+Silence analysis of the narrated files places speech at every scene boundary:
+0.0, 4.1 and 10.1 s in the sample; 0, 11.1, 21.1, 31.1, 41.1, 51.6, 61.6 and
+71.6 s in the overview. The templates are intentionally silent until real
+recordings replace the placeholder copy.
 
 ---
 
@@ -94,11 +99,19 @@ projects/
 ├── studio-sample/           # 15.5 s pipeline sample
 │   ├── manifest.json
 │   └── assets/voice/
-└── studio-overview/         # 82 s overview, eight scenes
+├── studio-overview/         # 82 s overview, eight scenes
+│   ├── manifest.json
+│   └── assets/
+│       ├── voice/
+│       └── images/
+├── career-journey/          # 64 s template — replace the copy
+│   ├── manifest.json
+│   ├── README.md
+│   └── assets/images/
+└── project-showcase/        # 62 s template — replace the copy
     ├── manifest.json
-    └── assets/
-        ├── voice/
-        └── images/
+    ├── README.md
+    └── assets/images/
 
 src/
 ├── index.ts                 # Remotion entry point
@@ -230,8 +243,8 @@ eligibility before further use. Full notes:
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
 | 2 | Scene manifest schema, registry, voiceover, transitions | ✅ complete |
-| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | 🟨 in progress — scene set complete; project compositions next |
-| 4 | Claude Code production skills + approval workflow | ⬜ |
+| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ✅ complete — compositions render; template content awaits real material |
+| 4 | Claude Code production skills + approval workflow | ⬜ next |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |
 
 ## Documentation
