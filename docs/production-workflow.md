@@ -67,11 +67,11 @@ preview with the same readable errors instead of rendering a broken video.
 
 ## Phase 4 status
 
-In progress. The four production skills and approval gates are implemented;
-`validate --final` enforces the gates. The first real run has passed Gate 1
-(career-story facts approved on 2026-11-09) and Gate 2 is pending: an
-80-second English script is drafted in
-`projects/studio-engineering/script.md`.
+In progress. Skills and gates are implemented. The first real run has passed
+Gates 1 and 2 (facts and script approved on 2026-11-09). Its 80-second
+storyboard is built and validated (2400 frames), and a silent preview is at
+`out/studio-engineering-preview.mp4`; Gate 3 is pending. Narration recording
+is the next step after storyboard approval.
 
 ## Recording guidance
 

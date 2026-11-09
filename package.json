@@ -34,6 +34,10 @@
     "prerender:project": "npm run assets",
     "render:project:preview": "remotion render ProjectShowcase out/project-showcase-preview.mp4 --scale=0.5",
     "prerender:project:preview": "npm run assets",
+    "render:engineering": "remotion render StudioEngineering out/studio-engineering-1080p.mp4",
+    "prerender:engineering": "npm run assets",
+    "render:engineering:preview": "remotion render StudioEngineering out/studio-engineering-preview.mp4 --scale=0.5",
+    "prerender:engineering:preview": "npm run assets",
     "still:sample": "remotion still CinematicSample out/cinematic-sample-poster.png --frame=150",
     "prestill:sample": "npm run assets"
   },

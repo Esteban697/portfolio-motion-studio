@@ -1,6 +1,7 @@
 ---
 project: studio-engineering
-status: draft
+status: approved
+approved: 2026-11-09
 targetDurationSeconds: 80
 language: en
 facts: projects/studio-engineering/facts.md (approved 2026-11-09)
@@ -128,16 +129,18 @@ Arc: hook -> timeline -> through-line -> proof -> current focus -> leadership
 Total: 80 seconds (target 60-90), 160 words, 64.0 s of speech. Every scene
 keeps narration between 72 % and 88 % of its duration, leaving room to breathe.
 
+## Resolved at Gate 2 (2026-11-09)
+
+- Script approved as written.
+- The 2015 ESET role stays omitted from the engineering timeline.
+- No KIT-AR capture is available; the impact scene uses a labelled concept
+  placeholder.
+- Outro tagline "AI Tech Lead · Agentic AI, XR & Cloud" approved as written.
+
 ## Open issues
 
 - [VERIFY: pronunciation of Virsabi, KIT-AR, WeAI, UXin3D — confirm before
   recording.]
-- [VERIFY: the 2015 ESET sales role is omitted from the engineering timeline;
-  confirm that is intended.]
-- Impact screenshot: no real KIT-AR capture is available. A concept placeholder
-  is proposed; replace it before publishing.
-- Brand tagline "AI Tech Lead · Agentic AI, XR & Cloud" is condensed from the
-  profile headline — confirm wording for the outro.
 - Narration is not recorded. This script is timed for 2.5 words/second; the
-  storyboard will set scene durations, and `npm run validate` will check the
+  storyboard sets scene durations, and `npm run validate` will check the
   recordings against them.

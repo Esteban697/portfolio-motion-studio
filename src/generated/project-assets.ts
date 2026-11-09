@@ -3,18 +3,19 @@
 
 import asset0 from '../../projects/career-journey/assets/images/screenshot-placeholder.svg';
 import asset1 from '../../projects/project-showcase/assets/images/screenshot-placeholder.svg';
-import asset2 from '../../projects/studio-overview/assets/voice/scene-01-intro.wav';
-import asset3 from '../../projects/studio-overview/assets/voice/scene-02-problem.wav';
-import asset4 from '../../projects/studio-overview/assets/voice/scene-03-principle.wav';
-import asset5 from '../../projects/studio-overview/assets/voice/scene-04-pipeline.wav';
-import asset6 from '../../projects/studio-overview/assets/voice/scene-04b-architecture.wav';
-import asset7 from '../../projects/studio-overview/assets/voice/scene-05-assets.wav';
-import asset8 from '../../projects/studio-overview/assets/images/workspace-placeholder.svg';
-import asset9 from '../../projects/studio-overview/assets/voice/scene-06-result.wav';
-import asset10 from '../../projects/studio-overview/assets/voice/scene-07-outro.wav';
-import asset11 from '../../projects/studio-sample/assets/voice/scene-01-intro.wav';
-import asset12 from '../../projects/studio-sample/assets/voice/scene-02-principle.wav';
-import asset13 from '../../projects/studio-sample/assets/voice/scene-03-outro.wav';
+import asset2 from '../../projects/studio-engineering/assets/images/kit-ar-placeholder.svg';
+import asset3 from '../../projects/studio-overview/assets/voice/scene-01-intro.wav';
+import asset4 from '../../projects/studio-overview/assets/voice/scene-02-problem.wav';
+import asset5 from '../../projects/studio-overview/assets/voice/scene-03-principle.wav';
+import asset6 from '../../projects/studio-overview/assets/voice/scene-04-pipeline.wav';
+import asset7 from '../../projects/studio-overview/assets/voice/scene-04b-architecture.wav';
+import asset8 from '../../projects/studio-overview/assets/voice/scene-05-assets.wav';
+import asset9 from '../../projects/studio-overview/assets/images/workspace-placeholder.svg';
+import asset10 from '../../projects/studio-overview/assets/voice/scene-06-result.wav';
+import asset11 from '../../projects/studio-overview/assets/voice/scene-07-outro.wav';
+import asset12 from '../../projects/studio-sample/assets/voice/scene-01-intro.wav';
+import asset13 from '../../projects/studio-sample/assets/voice/scene-02-principle.wav';
+import asset14 from '../../projects/studio-sample/assets/voice/scene-03-outro.wav';
 
 export const projectAssets: Record<string, Record<string, string>> = {
   'career-journey': {
@@ -23,20 +24,23 @@ export const projectAssets: Record<string, Record<string, string>> = {
   'project-showcase': {
     'assets/images/screenshot-placeholder.svg': asset1,
   },
+  'studio-engineering': {
+    'assets/images/kit-ar-placeholder.svg': asset2,
+  },
   'studio-overview': {
-    'assets/voice/scene-01-intro.wav': asset2,
-    'assets/voice/scene-02-problem.wav': asset3,
-    'assets/voice/scene-03-principle.wav': asset4,
-    'assets/voice/scene-04-pipeline.wav': asset5,
-    'assets/voice/scene-04b-architecture.wav': asset6,
-    'assets/voice/scene-05-assets.wav': asset7,
-    'assets/images/workspace-placeholder.svg': asset8,
-    'assets/voice/scene-06-result.wav': asset9,
-    'assets/voice/scene-07-outro.wav': asset10,
+    'assets/voice/scene-01-intro.wav': asset3,
+    'assets/voice/scene-02-problem.wav': asset4,
+    'assets/voice/scene-03-principle.wav': asset5,
+    'assets/voice/scene-04-pipeline.wav': asset6,
+    'assets/voice/scene-04b-architecture.wav': asset7,
+    'assets/voice/scene-05-assets.wav': asset8,
+    'assets/images/workspace-placeholder.svg': asset9,
+    'assets/voice/scene-06-result.wav': asset10,
+    'assets/voice/scene-07-outro.wav': asset11,
   },
   'studio-sample': {
-    'assets/voice/scene-01-intro.wav': asset11,
-    'assets/voice/scene-02-principle.wav': asset12,
-    'assets/voice/scene-03-outro.wav': asset13,
+    'assets/voice/scene-01-intro.wav': asset12,
+    'assets/voice/scene-02-principle.wav': asset13,
+    'assets/voice/scene-03-outro.wav': asset14,
   },
 };

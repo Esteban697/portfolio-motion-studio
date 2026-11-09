@@ -2,6 +2,7 @@ import React from 'react';
 import {Composition} from 'remotion';
 import careerJourneyManifest from '../projects/career-journey/manifest.json';
 import projectShowcaseManifest from '../projects/project-showcase/manifest.json';
+import studioEngineeringManifest from '../projects/studio-engineering/manifest.json';
 import overviewManifest from '../projects/studio-overview/manifest.json';
 import sampleManifest from '../projects/studio-sample/manifest.json';
 import {ProjectVideo} from './compositions/ProjectVideo';
@@ -17,6 +18,7 @@ const studioSample = parseProjectManifest(sampleManifest);
 const studioOverview = parseProjectManifest(overviewManifest);
 const careerJourney = parseProjectManifest(careerJourneyManifest);
 const projectShowcase = parseProjectManifest(projectShowcaseManifest);
+const studioEngineering = parseProjectManifest(studioEngineeringManifest);
 
 /**
  * Composition registry. Remotion requires compositions to be known
@@ -43,6 +45,7 @@ export const RemotionRoot: React.FC = () => {
       {registerProject('StudioOverview', studioOverview)}
       {registerProject('CareerJourney', careerJourney)}
       {registerProject('ProjectShowcase', projectShowcase)}
+      {registerProject('StudioEngineering', studioEngineering)}
     </>
   );
 };

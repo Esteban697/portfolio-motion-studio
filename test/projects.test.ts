@@ -35,6 +35,7 @@ describe('project folder conventions', () => {
     expect(projects.map((entry) => entry.id).sort()).toEqual([
       'career-journey',
       'project-showcase',
+      'studio-engineering',
       'studio-overview',
       'studio-sample',
     ]);

@@ -7,9 +7,10 @@ Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
 > **Status — Phase 4 in progress.**
-> Skills and gates are implemented. The first real run has passed Gate 1: the
-> career-story facts are approved and the 80-second English script is drafted
-> for Gate 2 review in `projects/studio-engineering/script.md`.
+> Facts (Gate 1) and script (Gate 2) are approved for the first real project.
+> Its 80-second storyboard is built, validated and previewed silently at
+> `out/studio-engineering-preview.mp4`; Gate 3 is pending. Narration recording
+> comes after that.
 
 ---
 
@@ -43,6 +44,7 @@ npm run render:overview        # 82 s overview → out/studio-overview-1080p.mp4
 npm run render:overview:preview
 npm run render:career          # 64 s template → out/career-journey-1080p.mp4
 npm run render:project         # 62 s template → out/project-showcase-1080p.mp4
+npm run render:engineering:preview   # 80 s story, silent until narrated
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
 npm run assets                 # regenerate the static asset registry
@@ -83,6 +85,7 @@ Preview   H.264 ·  960×540  · 30 fps · 15.509 s ·  1.31 MB | AAC 48 kHz
 Overview  H.264 · 1920×1080 · 30 fps · 82.005 s · 11.94 MB | AAC 48 kHz stereo
 Career    H.264 · 1920×1080 · 30 fps · 64.000 s ·  6.02 MB | template, no audio
 Project   H.264 · 1920×1080 · 30 fps · 62.000 s ·  6.04 MB | template, no audio
+Story     H.264 ·  960×540  · 30 fps · 80.000 s ·  2.30 MB | preview, silent
 ```
 
 Silence analysis of the narrated files places speech at every scene boundary:
@@ -116,9 +119,15 @@ projects/
 │   ├── manifest.json
 │   ├── README.md
 │   └── assets/images/
-└── project-showcase/        # 62 s template — replace the copy
+├── project-showcase/        # 62 s template — replace the copy
+│   ├── manifest.json
+│   ├── README.md
+│   └── assets/images/
+└── studio-engineering/      # 80 s career story (facts + script approved)
     ├── manifest.json
-    ├── README.md
+    ├── facts.md
+    ├── script.md
+    ├── storyboard.md
     └── assets/images/
 
 src/
@@ -275,7 +284,7 @@ eligibility before further use. Full notes:
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
 | 2 | Scene manifest schema, registry, voiceover, transitions | ✅ complete |
 | 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ✅ complete — compositions render; template content awaits real material |
-| 4 | Claude Code production skills + approval workflow | 🟨 in progress — skills and gates done; first real project in review |
+| 4 | Claude Code production skills + approval workflow | 🟨 in progress — skills and gates done; first real project at Gate 3 |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |
 
 ## Documentation

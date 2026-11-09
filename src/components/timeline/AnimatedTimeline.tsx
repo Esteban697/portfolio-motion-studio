@@ -39,6 +39,9 @@ export const AnimatedTimeline: React.FC<AnimatedTimelineProps> = ({brand, conten
   const startX = safeArea.x + RAIL_INSET;
   const endX = defaultProfile.width - safeArea.x - RAIL_INSET;
   const geometry = timelineGeometry(content.milestones.length, startX, endX);
+  // Six milestones leave ~200px per column; tighten type so titles stay on
+  // one line where the words allow it.
+  const dense = content.milestones.length >= 6;
 
   const railDraw = interpolate(frame - 16, [0, 44], [0, 1], {
     extrapolateLeft: 'clamp',
@@ -175,7 +178,7 @@ export const AnimatedTimeline: React.FC<AnimatedTimelineProps> = ({brand, conten
               <div
                 style={{
                   fontFamily: fontFamily.sans,
-                  fontSize: 28,
+                  fontSize: dense ? 24 : 28,
                   fontWeight: fontWeight.medium,
                   lineHeight: 1.2,
                   color: colors.silver,
@@ -186,9 +189,9 @@ export const AnimatedTimeline: React.FC<AnimatedTimelineProps> = ({brand, conten
               {milestone.detail ? (
                 <div
                   style={{
-                    marginTop: 10,
+                    marginTop: dense ? 8 : 10,
                     fontFamily: fontFamily.sans,
-                    fontSize: 19,
+                    fontSize: dense ? 17 : 19,
                     lineHeight: 1.45,
                     color: colors.mutedBlueGrey,
                   }}

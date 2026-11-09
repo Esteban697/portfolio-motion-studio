@@ -53,9 +53,9 @@ npm run still:sample           # poster frame
 Phase 4 in progress: four production skills (`.claude/skills/`) and manifest
 approval gates are implemented; `npm run validate -- --project <id> --final`
 enforces them, and `test/skills.test.ts` guards the skill contracts. First real
-run: career-story facts approved (Gate 1) and an 80 s English script drafted in
-`projects/studio-engineering/script.md` (Gate 2 pending). Do not advance a gate
-on the user's behalf.
+run: facts and script approved (Gates 1-2); `projects/studio-engineering` has a
+validated 80 s manifest and storyboard with a silent preview, and Gate 3 is
+pending. Narration is not recorded. Do not advance a gate on the user's behalf.
 
 ## Remotion license
 

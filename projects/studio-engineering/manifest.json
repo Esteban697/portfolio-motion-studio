@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "projectId": "studio-engineering",
+  "title": "Esteban Struve — Career Story",
+  "profile": "landscape-1080p",
+  "narrative": {
+    "logline": "An eighty-second career story: from computer vision research in 2013 to leading agentic AI teams in 2026.",
+    "targetDurationSeconds": 80
+  },
+  "brand": {
+    "initials": "ES",
+    "name": "Esteban Struve",
+    "tagline": "AI Tech Lead · Agentic AI, XR & Cloud",
+    "url": "uxin3d.com"
+  },
+  "approvals": {
+    "facts": true,
+    "script": true,
+    "storyboard": false,
+    "finalRender": false
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "type": "cinematic-intro",
+      "durationSeconds": 10,
+      "transitionOut": "light-fade",
+      "content": {
+        "eyebrow": "Career journey",
+        "headline": [
+          { "text": "From pixels," },
+          { "text": "to agents.", "accent": true }
+        ],
+        "subline": "Esteban Struve — AI Tech Lead, Madrid.",
+        "chapter": "Opening",
+        "index": "01",
+        "railLabel": "Intro"
+      }
+    },
+    {
+      "id": "timeline",
+      "type": "animated-timeline",
+      "durationSeconds": 15,
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "02",
+        "label": "Background",
+        "chapter": "Timeline",
+        "headline": "Ten years, six teams.",
+        "milestones": [
+          { "marker": "2013", "title": "Computer vision", "detail": "PIV research · IVIC" },
+          { "marker": "2017", "title": "Danske Bank", "detail": ".NET and C# APIs" },
+          { "marker": "2019", "title": "Virsabi", "detail": "First Azure platform" },
+          { "marker": "2020", "title": "Laerdal", "detail": "Healthcare XR" },
+          { "marker": "2022", "title": "KIT-AR", "detail": "AR for manufacturing" },
+          { "marker": "2026", "title": "WeAI", "detail": "AI Tech Lead" }
+        ],
+        "footnote": "From research to agentic AI — six teams, one direction."
+      }
+    },
+    {
+      "id": "through-line",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "index": "03",
+        "label": "The through-line",
+        "lines": [
+          { "text": "Software should" },
+          { "text": "adapt to people," },
+          { "text": "not the reverse.", "accent": true }
+        ],
+        "footnote": "The lesson carried from XR interfaces to agent design.",
+        "ghostNumeral": "03"
+      }
+    },
+    {
+      "id": "impact",
+      "type": "image-showcase",
+      "durationSeconds": 12,
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "04",
+        "label": "Selected impact",
+        "chapter": "KIT-AR",
+        "headline": "Two months, to two weeks.",
+        "images": [
+          {
+            "src": "assets/images/kit-ar-placeholder.svg",
+            "caption": "Dynamic holographic UI — add a real capture",
+            "kind": "concept"
+          }
+        ],
+        "footnote": "Design-to-deployment at KIT-AR; featured at TAP aircraft maintenance on TVI news."
+      }
+    },
+    {
+      "id": "current-focus",
+      "type": "architecture-diagram",
+      "durationSeconds": 13,
+      "transitionOut": "light-fade",
+      "content": {
+        "index": "05",
+        "label": "Current focus",
+        "chapter": "Agentic AI",
+        "headline": "Agentic systems, built like software.",
+        "diagram": {
+          "nodes": [
+            { "id": "interface", "label": "Interface", "sublabel": "Web · chat", "column": 0, "row": 0 },
+            { "id": "agent", "label": "Agent", "sublabel": "LangGraph", "column": 1, "row": 0, "accent": true },
+            { "id": "knowledge", "label": "Knowledge", "sublabel": "RAG · vectors", "column": 1, "row": 1 },
+            { "id": "tools", "label": "Tools", "sublabel": "APIs · actions", "column": 2, "row": 0 },
+            { "id": "response", "label": "Response", "sublabel": "Grounded answer", "column": 3, "row": 0 }
+          ],
+          "edges": [
+            { "from": "interface", "to": "agent" },
+            { "from": "knowledge", "to": "agent" },
+            { "from": "agent", "to": "tools" },
+            { "from": "agent", "to": "response", "accent": true }
+          ]
+        },
+        "footnote": "The current focus: reasoning, retrieval and tool use."
+      }
+    },
+    {
+      "id": "leadership",
+      "type": "title-statement",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "index": "06",
+        "label": "Leadership",
+        "lines": [
+          { "text": "I lead teams." },
+          { "text": "I still build.", "accent": true },
+          { "text": "Both matter." }
+        ],
+        "footnote": "Hiring, architecture, mentoring — and shipping.",
+        "ghostNumeral": "06"
+      }
+    },
+    {
+      "id": "outro",
+      "type": "cinematic-outro",
+      "durationSeconds": 10,
+      "transitionOut": "fade",
+      "content": {
+        "kicker": "Esteban Struve",
+        "closingLine": "Ten years in. Still building."
+      }
+    }
+  ]
+}
