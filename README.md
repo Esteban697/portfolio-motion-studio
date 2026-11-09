@@ -38,7 +38,7 @@ scrub the timeline.
 
 ```bash
 npm run render:sample          # 1920×1080 H.264 MP4 → out/cinematic-sample-1080p.mp4
-npm run render:sample:preview  # 1280×720 preview (scale 0.6667) → out/cinematic-sample-720p.mp4
+npm run render:sample:preview  # 960×540 preview (scale 0.5) → out/cinematic-sample-preview.mp4
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
 npm run typecheck              # strict TypeScript check
@@ -52,7 +52,8 @@ later renders reuse both caches.
 The Phase 1 sample was rendered and inspected with FFprobe:
 
 ```
-H.264 · 1920×1080 · 30 fps · duration 10.000 s · 1.67 MB
+Final:   H.264 · 1920×1080 · 30 fps · 10.000 s · 1.67 MB
+Preview: H.264 ·  960×540  · 30 fps · 10.000 s · 0.61 MB
 ```
 
 ---

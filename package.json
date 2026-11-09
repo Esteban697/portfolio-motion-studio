@@ -13,7 +13,7 @@
     "compositions": "remotion compositions",
     "typecheck": "tsc --noEmit",
     "render:sample": "remotion render CinematicSample out/cinematic-sample-1080p.mp4",
-    "render:sample:preview": "remotion render CinematicSample out/cinematic-sample-720p.mp4 --scale=0.6667",
+    "render:sample:preview": "remotion render CinematicSample out/cinematic-sample-preview.mp4 --scale=0.5",
     "still:sample": "remotion still CinematicSample out/cinematic-sample-poster.png --frame=150"
   },
   "dependencies": {

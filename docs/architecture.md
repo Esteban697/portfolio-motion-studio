@@ -43,7 +43,11 @@ const introFrames = secondsToFrames(timing.introSeconds, fps);
 (`landscape-1080p` = 1920×1080 @ 30 fps). Components use a `1080p`-calibrated
 layout box and safe area. A 9:16 or 1:1 profile is added by declaring it —
 not by rewriting components. Previews render by scaling the same layout
-(`--scale=0.6667` → 1280×720), so preview and final stay visually identical.
+(`--scale=0.5` → 960×540, within the brief's "720p or lower" preview
+target), so preview and final stay visually identical. Remotion requires
+integer, even output dimensions for H.264: use `0.5` or `0.75`. Fractional
+results such as `0.6667` (1280.06) or an odd scaled height such as 675 fail
+validation — don't "fix" this with a custom scale.
 
 ## Visual system
 

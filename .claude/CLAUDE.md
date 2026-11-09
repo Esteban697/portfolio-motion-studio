@@ -9,7 +9,7 @@ Local-first Remotion pipeline for cinematic portfolio video. Read
 npm run dev                    # Remotion Studio
 npm run typecheck              # strict TS check — run before claiming done
 npm run render:sample          # 1080p H.264 → out/
-npm run render:sample:preview  # 1280×720 (--scale=0.6667)
+npm run render:sample:preview  # 960×540 (--scale=0.5; H.264 needs even int dims)
 npm run still:sample           # poster frame
 ```
 
