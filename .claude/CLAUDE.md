@@ -45,13 +45,13 @@ npm run still:sample           # poster frame
 
 ## Status
 
-Phase 2 complete: manifest schema (Zod), exhaustive scene registry,
-manifest-driven composition, per-scene voiceover with FFprobe validation,
-asset registry, in-scene transitions, validation CLI, two sample compositions
-(15.5 s and 71.5 s) and 66 tests. Next is Phase 3: timeline, image showcase,
-architecture diagram and data-flow scenes, then career-journey and
-project-showcase compositions. Do not jump ahead to the Claude Code production
-skills (Phase 4) or social formats (Phase 5).
+Phase 2 complete. Phase 3 in progress: animated-timeline and
+architecture-diagram scenes are implemented with pure layout modules
+(`components/timeline/layout.ts`, `components/diagram/layout.ts`), schema
+rules, registry entries and tests (92 total), and both appear in the 82 s
+studio-overview sample. Remaining Phase 3: image showcase, data-flow scene,
+career-journey and project-showcase compositions. Do not jump ahead to the
+Claude Code production skills (Phase 4) or social formats (Phase 5).
 
 ## Remotion license
 

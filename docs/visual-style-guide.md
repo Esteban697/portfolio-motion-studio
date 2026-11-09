@@ -61,6 +61,30 @@ lower-right cyan lift → 80 px grid lattice with a radial mask → vignette.
 Grid opacity stays at 55% of its already-faint line value; it should be felt,
 not read.
 
+## Timeline and diagram scenes
+
+**Timeline**
+
+- Horizontal rail, one diamond node per milestone: marker above, title and
+  detail below. Never more than six milestones.
+- Only the final node is filled cyan; travelled segments sit at 50% cyan.
+  Earlier nodes are outline-only diamonds.
+- Titles are short nouns ("Facts", "Script"). Detail lines carry the meaning.
+- The rail draws first; nodes land left to right, 10 frames apart.
+
+**Diagram**
+
+- Nodes are dark panels with a 12 px radius. Accent nodes get a cyan border,
+  faint cyan fill and one small cyan dot beside the label.
+- Edges are thin S-curves with small arrowheads, drawn only after both
+  endpoints exist. Accent edges mark the important path — use at most two.
+- The grid is deliberately small (0–3 columns, 0–2 rows, ≤ 8 nodes). If a
+  diagram needs more, it is two diagrams, not one crowded one.
+- Sublabels are short mono tags ("VALIDATED JSON"). They explain the box; they
+  are not sentences.
+- If a diagram illustrates a concept rather than a real system, say so in the
+  scene copy or footnote.
+
 ## Transitions
 
 | Name | Use |

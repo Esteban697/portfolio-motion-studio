@@ -133,10 +133,27 @@ validation — don't "fix" this with a custom scale.
 
 Components consume tokens; they never hardcode color or size literals.
 
+## Scene catalogue
+
+| Type | Component | Content |
+| --- | --- | --- |
+| `cinematic-intro` | `CinematicIntro` | eyebrow, headline lines, subline, chapter, index, railLabel |
+| `title-statement` | `TitleStatement` | index, label, statement lines, footnote, ghostNumeral |
+| `animated-timeline` | `AnimatedTimeline` | index, label, chapter, headline, 2–6 milestones, footnote |
+| `architecture-diagram` | `ArchitectureDiagram` | index, label, chapter, headline, nodes + edges, footnote |
+| `cinematic-outro` | `CinematicOutro` | kicker, closingLine |
+
+Layout math for the timeline and diagram lives in pure, tested modules
+(`components/timeline/layout.ts`, `components/diagram/layout.ts`), so
+placement and edge routing are verified without rendering. The diagram's
+column/row grid is intentionally small: columns 0–3, rows 0–2, at most eight
+nodes. That constraint is enforced by the schema and keeps diagrams legible at
+1080p.
+
 ## Sample structure
 
 `CinematicSample` is registered in `src/Root.tsx` from the `studio-sample`
-manifest: three scenes, 10 s, 300 frames at 30 fps. Nothing in components is
+manifest: three scenes, 15.5 s, 465 frames at 30 fps. Nothing in components is
 hardcoded — changing `durationSeconds` in the manifest and re-rendering is
 sufficient.
 
@@ -149,10 +166,10 @@ sufficient.
 Each scene is self-contained and reads only props, so it can be reused by any
 composition.
 
-`StudioOverview` is the Phase 2 acceptance sample: seven scenes, 71.5 s,
-built entirely from the same three scene types with varied transitions and
-narration. Adding it required a manifest, narration files and two lines in
-`Root.tsx` — no rendering code changed.
+`StudioOverview` is the acceptance sample: eight scenes, 82 s, covering every
+implemented scene type with varied transitions and narration. Adding a scene
+type required a schema member, a component, a registry entry and a layout
+test — no changes to the composition or manifest machinery.
 
 ## Decisions and their reasons
 
@@ -167,6 +184,7 @@ narration. Adding it required a manifest, narration files and two lines in
 | System font stack | Offline renders, no font licensing/network risk; swap point documented |
 | CSS gradients/SVG for atmosphere and marks | No binary assets, editable, resolution-independent |
 | In-scene transition envelopes | Keeps every scene duration exact (no overlap), which keeps narration sync and validation math simple; a real timeline-transition library can replace the layer later without touching manifests |
+| Pure layout modules for timeline and diagram | Placement and edge routing are the parts most likely to break silently; keeping them as functions makes them testable without a browser |
 | Generated asset registry | Keeps originals in `projects/<id>/assets/` with no duplicated copies while still giving Remotion static imports |
 | FFprobe for audio facts | Reuses the delivery toolchain; no audio decoding inside the app |
 | Vitest for tests | Handles TSX and TS paths without custom config; tests cover schema, timeline, registry, timing |

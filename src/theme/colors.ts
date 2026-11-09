@@ -32,6 +32,8 @@ export const alpha = {
   cyanLine: 'rgba(49, 197, 217, 0.42)',
   /** Cyan text glow tint. */
   cyanGlow: 'rgba(49, 197, 217, 0.30)',
+  /** Very soft halo for emphasised surfaces (diagram nodes). */
+  cyanHalo: 'rgba(49, 197, 217, 0.12)',
   /** Muted supporting text at full legibility. */
   silverSoft: 'rgba(232, 237, 245, 0.62)',
   /** Deep shadow used for vignette. */

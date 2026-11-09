@@ -105,6 +105,137 @@ export const cinematicOutroContentSchema = z.strictObject({
 
 export type CinematicOutroContent = z.infer<typeof cinematicOutroContentSchema>;
 
+/** One milestone on a horizontal timeline. */
+export const milestoneSchema = z.strictObject({
+  /** Short marker above the node, e.g. "01" or "2024". */
+  marker: z
+    .string()
+    .trim()
+    .min(1, 'marker is required')
+    .max(6, 'marker must be at most 6 characters'),
+  title: displayText('milestone title', 40),
+  detail: z.string().trim().max(60, 'detail must be at most 60 characters').optional(),
+});
+
+export type MilestoneContent = z.infer<typeof milestoneSchema>;
+
+export const animatedTimelineContentSchema = z.strictObject({
+  index: displayText('index', 3),
+  label: displayText('label', 40),
+  chapter: displayText('chapter', 40),
+  headline: displayText('headline', 90),
+  milestones: z
+    .array(milestoneSchema)
+    .min(2, 'a timeline needs at least two milestones')
+    .max(6, 'a timeline supports at most six milestones at 1080p'),
+  footnote: z.string().trim().max(160, 'footnote must be at most 160 characters').optional(),
+});
+
+export type AnimatedTimelineContent = z.infer<typeof animatedTimelineContentSchema>;
+
+/** A box in the architecture diagram, placed on a small column/row grid. */
+export const diagramNodeSchema = z.strictObject({
+  id: kebabId('node id'),
+  label: z
+    .string()
+    .trim()
+    .min(1, 'node label is required')
+    .max(28, 'node label must be at most 28 characters'),
+  sublabel: z.string().trim().max(28, 'node sublabel must be at most 28 characters').optional(),
+  column: z
+    .number()
+    .int('column must be an integer')
+    .min(0, 'column must be 0–3')
+    .max(3, 'column must be 0–3'),
+  row: z
+    .number()
+    .int('row must be an integer')
+    .min(0, 'row must be 0–2')
+    .max(2, 'row must be 0–2'),
+  /** Highlights the node as the key piece of the system. */
+  accent: z.boolean().optional(),
+});
+
+export type DiagramNodeContent = z.infer<typeof diagramNodeSchema>;
+
+export const diagramEdgeSchema = z.strictObject({
+  from: kebabId('edge.from'),
+  to: kebabId('edge.to'),
+  /** Highlights the flow as the important path. */
+  accent: z.boolean().optional(),
+});
+
+export type DiagramEdgeContent = z.infer<typeof diagramEdgeSchema>;
+
+export const diagramSchema = z
+  .strictObject({
+    nodes: z
+      .array(diagramNodeSchema)
+      .min(2, 'a diagram needs at least two nodes')
+      .max(8, 'a diagram supports at most eight nodes'),
+    edges: z.array(diagramEdgeSchema).max(12, 'a diagram supports at most twelve edges'),
+  })
+  .superRefine((diagram, ctx) => {
+    const ids = new Set<string>();
+    const cells = new Set<string>();
+
+    diagram.nodes.forEach((node, index) => {
+      if (ids.has(node.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `duplicate node id "${node.id}"`,
+          path: ['nodes', index, 'id'],
+        });
+      }
+      ids.add(node.id);
+
+      const cell = `${node.column}:${node.row}`;
+      if (cells.has(cell)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `two nodes share column ${node.column}, row ${node.row}`,
+          path: ['nodes', index],
+        });
+      }
+      cells.add(cell);
+    });
+
+    diagram.edges.forEach((edge, index) => {
+      if (!ids.has(edge.from)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `edge references unknown node "${edge.from}"`,
+          path: ['edges', index, 'from'],
+        });
+      }
+      if (!ids.has(edge.to)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `edge references unknown node "${edge.to}"`,
+          path: ['edges', index, 'to'],
+        });
+      }
+      if (edge.from === edge.to) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'an edge cannot connect a node to itself',
+          path: ['edges', index],
+        });
+      }
+    });
+  });
+
+export const architectureDiagramContentSchema = z.strictObject({
+  index: displayText('index', 3),
+  label: displayText('label', 40),
+  chapter: displayText('chapter', 40),
+  headline: displayText('headline', 90),
+  diagram: diagramSchema,
+  footnote: z.string().trim().max(160, 'footnote must be at most 160 characters').optional(),
+});
+
+export type ArchitectureDiagramContent = z.infer<typeof architectureDiagramContentSchema>;
+
 /**
  * A project-relative POSIX path. Rejects protocols, absolute paths, `..`
  * segments and backslashes so manifests stay portable and cannot escape the
@@ -185,15 +316,35 @@ export const cinematicOutroSceneSchema = z.strictObject({
   content: cinematicOutroContentSchema,
 });
 
+export const animatedTimelineSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('animated-timeline'),
+  content: animatedTimelineContentSchema,
+});
+
+export const architectureDiagramSceneSchema = z.strictObject({
+  ...sceneBase,
+  type: z.literal('architecture-diagram'),
+  content: architectureDiagramContentSchema,
+});
+
 /**
  * Every scene type the renderer knows. Adding a type requires a component,
  * a registry entry, and a schema member — TypeScript enforces the registry.
  */
-export const supportedSceneTypes = ['cinematic-intro', 'title-statement', 'cinematic-outro'] as const;
+export const supportedSceneTypes = [
+  'cinematic-intro',
+  'title-statement',
+  'animated-timeline',
+  'architecture-diagram',
+  'cinematic-outro',
+] as const;
 
 export const sceneSchema = z.discriminatedUnion('type', [
   cinematicIntroSceneSchema,
   titleStatementSceneSchema,
+  animatedTimelineSceneSchema,
+  architectureDiagramSceneSchema,
   cinematicOutroSceneSchema,
 ]);
 

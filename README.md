@@ -6,12 +6,12 @@ technical project videos from code.
 Built with **Remotion**, **React** and **TypeScript**. Content lives in typed
 data; components are reusable; rendering is deterministic and entirely local.
 
-> **Status — Phase 2 complete.**
-> Projects are data: a validated manifest drives scene order, timing, copy,
-> per-scene narration and transitions through an exhaustive registry. Two
-> sample compositions render end to end — a 15.5 s short sample and a 71.5 s
-> overview. Phase 3 adds timeline, screenshot, architecture and data-flow
-> scenes.
+> **Status — Phase 3 in progress.**
+> Phase 2 is complete: manifests, registry, voiceover, validation,
+> transitions and two samples. Phase 3 has added the **animated timeline** and
+> **architecture diagram** scenes, both demonstrated in the 82-second
+> overview. Image showcase, data flow, and the career-journey / project
+> showcase compositions are next.
 
 ---
 
@@ -41,7 +41,7 @@ scrub the timeline.
 ```bash
 npm run render:sample          # 1920×1080 H.264 MP4 → out/cinematic-sample-1080p.mp4
 npm run render:sample:preview  # 960×540 preview (scale 0.5) → out/cinematic-sample-preview.mp4
-npm run render:overview        # 71.5 s overview → out/studio-overview-1080p.mp4
+npm run render:overview        # 82 s overview → out/studio-overview-1080p.mp4
 npm run render:overview:preview
 npm run still:sample           # single poster frame (frame 150) → out/cinematic-sample-poster.png
 npm run compositions           # list registered compositions
@@ -77,14 +77,14 @@ later renders reuse both caches.
 Both samples were rendered and inspected with FFprobe:
 
 ```
-Sample    H.264 · 1920×1080 · 30 fps · 15.500 s · 2.65 MB | AAC 48 kHz stereo
-Preview   H.264 ·  960×540  · 30 fps · 15.509 s · 1.31 MB | AAC 48 kHz
-Overview  H.264 · 1920×1080 · 30 fps · 71.509 s · 9.60 MB | AAC 48 kHz stereo
+Sample    H.264 · 1920×1080 · 30 fps · 15.500 s ·  2.65 MB | AAC 48 kHz stereo
+Preview   H.264 ·  960×540  · 30 fps · 15.509 s ·  1.31 MB | AAC 48 kHz
+Overview  H.264 · 1920×1080 · 30 fps · 82.005 s · 11.67 MB | AAC 48 kHz stereo
 ```
 
-Silence analysis of each file places speech at every scene boundary (0.0 s,
-4.1 s, 10.1 s in the sample; 0, 11.1, 21.1, 31.1, 41.1, 51.1, 61.1 s in the
-overview).
+Silence analysis of each file places speech at every scene boundary: 0.0,
+4.1 and 10.1 s in the sample; 0, 11.1, 21.1, 31.1, 41.1, 51.6, 61.6 and
+71.6 s in the overview.
 
 ---
 
@@ -95,7 +95,7 @@ projects/
 ├── studio-sample/           # 15.5 s pipeline sample
 │   ├── manifest.json
 │   └── assets/voice/
-└── studio-overview/         # 71.5 s overview, seven scenes
+└── studio-overview/         # 82 s overview, eight scenes
     ├── manifest.json
     └── assets/voice/
 
@@ -112,10 +112,17 @@ src/
 │   ├── CinematicIntro.tsx
 │   ├── TitleStatement.tsx
 │   ├── CinematicOutro.tsx
+│   ├── timeline/
+│   │   ├── AnimatedTimeline.tsx
+│   │   └── layout.ts        # milestone spacing (pure, tested)
+│   ├── diagram/
+│   │   ├── ArchitectureDiagram.tsx
+│   │   └── layout.ts        # grid placement + edge paths (pure, tested)
 │   ├── primitives/
 │   │   ├── Backdrop.tsx     # Layered gradients, grid, vignette
 │   │   ├── Chrome.tsx       # Top chrome + side rail
 │   │   ├── RevealText.tsx   # Masked, staggered line reveal
+│   │   ├── SceneHeading.tsx # Index/label + revealed headline
 │   │   └── BrandMark.tsx    # SVG monogram plate
 ├── transitions/
 │   ├── transitions.ts       # Envelope math (pure functions)
@@ -217,7 +224,7 @@ eligibility before further use. Full notes:
 | 0 | Environment + license reconnaissance | ✅ complete |
 | 1 | Remotion foundation, theme, intro/title/outro, 10 s sample | ✅ complete |
 | 2 | Scene manifest schema, registry, voiceover, transitions | ✅ complete |
-| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | ⬜ next |
+| 3 | Timeline, image showcase, architecture diagram, data flow; career-journey + project-showcase compositions | 🟨 in progress — timeline + architecture diagram done; image showcase, data flow, project compositions next |
 | 4 | Claude Code production skills + approval workflow | ⬜ |
 | 5 | Web-optimized output, poster, embedding docs, social aspect ratios | ⬜ |
 

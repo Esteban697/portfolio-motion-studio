@@ -60,12 +60,12 @@ choices alike.
 Manifest validation also runs inside the app, so an invalid manifest stops the
 preview with the same readable errors instead of rendering a broken video.
 
-## Phase 2 status
+## Phase 3 status
 
-Complete: manifest schema, scene registry, per-scene voiceover with FFprobe
-validation, in-scene transitions, and a 71.5 s overview sample. Phase 3 adds
-timeline, image showcase, architecture diagram and data-flow scenes, plus the
-career-journey and project-showcase compositions.
+In progress. The animated timeline and architecture-diagram scenes are
+implemented, schema-validated and demonstrated in the 82 s overview. Remaining:
+image showcase, data-flow scene, and the career-journey / project-showcase
+compositions (which need the owner's real project material and recordings).
 
 ## Recording guidance
 

@@ -4,8 +4,8 @@
   "title": "Studio Overview",
   "profile": "landscape-1080p",
   "narrative": {
-    "logline": "A seventy-second overview of the Portfolio Motion Studio pipeline, with placeholder narration.",
-    "targetDurationSeconds": 71.5
+    "logline": "An eighty-second overview of the Portfolio Motion Studio pipeline, with placeholder narration.",
+    "targetDurationSeconds": 82
   },
   "brand": {
     "initials": "PM",
@@ -71,21 +71,51 @@
     },
     {
       "id": "pipeline",
-      "type": "title-statement",
+      "type": "animated-timeline",
       "durationSeconds": 10,
       "voiceover": { "src": "assets/voice/scene-04-pipeline.wav" },
       "transitionOut": "light-fade",
       "content": {
         "index": "04",
         "label": "The pipeline",
-        "lines": [
-          { "text": "Facts." },
-          { "text": "Script." },
-          { "text": "Storyboard." },
-          { "text": "Render.", "accent": true }
+        "chapter": "Pipeline",
+        "headline": "From facts to frames.",
+        "milestones": [
+          { "marker": "01", "title": "Facts", "detail": "Verified sources" },
+          { "marker": "02", "title": "Script", "detail": "Spoken narrative" },
+          { "marker": "03", "title": "Storyboard", "detail": "Scenes and timing" },
+          { "marker": "04", "title": "Render", "detail": "Local MP4" }
         ],
-        "footnote": "Each stage is approved before the next one begins.",
-        "ghostNumeral": "04"
+        "footnote": "Each stage is approved before the next one begins."
+      }
+    },
+    {
+      "id": "architecture",
+      "type": "architecture-diagram",
+      "durationSeconds": 10.5,
+      "voiceover": { "src": "assets/voice/scene-04b-architecture.wav" },
+      "transitionOut": "camera-push",
+      "content": {
+        "index": "05",
+        "label": "The architecture",
+        "chapter": "Architecture",
+        "headline": "How the pieces connect.",
+        "diagram": {
+          "nodes": [
+            { "id": "sources", "label": "Source material", "sublabel": "Repo · notes", "column": 0, "row": 0 },
+            { "id": "manifest", "label": "Project manifest", "sublabel": "Validated JSON", "column": 1, "row": 0, "accent": true },
+            { "id": "assets", "label": "Narration", "sublabel": "One WAV per scene", "column": 1, "row": 1 },
+            { "id": "registry", "label": "Scene registry", "sublabel": "Type → component", "column": 2, "row": 1 },
+            { "id": "render", "label": "Remotion render", "sublabel": "Local · 1080p", "column": 3, "row": 1 }
+          ],
+          "edges": [
+            { "from": "sources", "to": "manifest" },
+            { "from": "manifest", "to": "registry", "accent": true },
+            { "from": "assets", "to": "registry" },
+            { "from": "registry", "to": "render", "accent": true }
+          ]
+        },
+        "footnote": "Content, assets and rendering stay separate by design."
       }
     },
     {
@@ -95,7 +125,7 @@
       "voiceover": { "src": "assets/voice/scene-05-assets.wav" },
       "transitionOut": "camera-push",
       "content": {
-        "index": "05",
+        "index": "06",
         "label": "Your assets",
         "lines": [
           { "text": "Your voice." },
@@ -103,7 +133,7 @@
           { "text": "Your machine.", "accent": true }
         ],
         "footnote": "Nothing is uploaded. Originals are never modified.",
-        "ghostNumeral": "05"
+        "ghostNumeral": "06"
       }
     },
     {
@@ -113,7 +143,7 @@
       "voiceover": { "src": "assets/voice/scene-06-result.wav" },
       "transitionOut": "fade",
       "content": {
-        "index": "06",
+        "index": "07",
         "label": "The result",
         "lines": [
           { "text": "Same inputs." },
@@ -121,7 +151,7 @@
           { "text": "Every time.", "accent": true }
         ],
         "footnote": "A render you can repeat, review and trust.",
-        "ghostNumeral": "06"
+        "ghostNumeral": "07"
       }
     },
     {

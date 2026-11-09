@@ -1,4 +1,6 @@
 import React from 'react';
+import {ArchitectureDiagram} from '../components/diagram/ArchitectureDiagram';
+import {AnimatedTimeline} from '../components/timeline/AnimatedTimeline';
 import {CinematicIntro} from '../components/CinematicIntro';
 import {CinematicOutro} from '../components/CinematicOutro';
 import {TitleStatement} from '../components/TitleStatement';
@@ -18,6 +20,8 @@ type SceneRegistry = {
 export const sceneRegistry = {
   'cinematic-intro': CinematicIntro,
   'title-statement': TitleStatement,
+  'animated-timeline': AnimatedTimeline,
+  'architecture-diagram': ArchitectureDiagram,
   'cinematic-outro': CinematicOutro,
 } satisfies SceneRegistry;
 
@@ -25,6 +29,8 @@ export const sceneRegistry = {
 export const sceneLabels: Record<SceneType, string> = {
   'cinematic-intro': 'Cinematic intro',
   'title-statement': 'Title / statement',
+  'animated-timeline': 'Animated timeline',
+  'architecture-diagram': 'Architecture diagram',
   'cinematic-outro': 'Closing / call to action',
 };
 

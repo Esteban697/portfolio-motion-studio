@@ -1,6 +1,8 @@
 import {describe, expect, it} from 'vitest';
 import manifest from '../projects/studio-sample/manifest.json';
 import {
+  animatedTimelineContentSchema,
+  architectureDiagramContentSchema,
   formatIssues,
   parseProjectManifest,
   projectManifestSchema,
@@ -60,7 +62,13 @@ describe('project manifest schema', () => {
   });
 
   it('declares every supported scene type in the schema union', () => {
-    expect(supportedSceneTypes).toEqual(['cinematic-intro', 'title-statement', 'cinematic-outro']);
+    expect(supportedSceneTypes).toEqual([
+      'cinematic-intro',
+      'title-statement',
+      'animated-timeline',
+      'architecture-diagram',
+      'cinematic-outro',
+    ]);
   });
 
   it('defaults a missing transitionOut to cut', () => {
@@ -187,5 +195,130 @@ describe('project manifest schema', () => {
     m.scenes = [];
 
     expect(() => parseProjectManifest(m)).toThrow(/Invalid project manifest:[\s\S]*at least one scene/);
+  });
+});
+
+const timelineContent = {
+  index: '04',
+  label: 'The pipeline',
+  chapter: 'Pipeline',
+  headline: 'From facts to frames.',
+  milestones: [
+    {marker: '01', title: 'Facts'},
+    {marker: '02', title: 'Render'},
+  ],
+};
+
+const diagramContent = {
+  index: '05',
+  label: 'The architecture',
+  chapter: 'Architecture',
+  headline: 'How the pieces connect.',
+  diagram: {
+    nodes: [
+      {id: 'manifest', label: 'Manifest', column: 0, row: 0},
+      {id: 'render', label: 'Render', column: 1, row: 0},
+    ],
+    edges: [{from: 'manifest', to: 'render'}],
+  },
+};
+
+describe('animated timeline content', () => {
+  it('accepts a minimal two-milestone timeline', () => {
+    expect(animatedTimelineContentSchema.safeParse(timelineContent).success).toBe(true);
+  });
+
+  it('rejects a timeline with fewer than two milestones', () => {
+    const result = animatedTimelineContentSchema.safeParse({
+      ...timelineContent,
+      milestones: [timelineContent.milestones[0]],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.path.join('.')).toBe('milestones');
+    }
+  });
+
+  it('rejects more milestones than the layout supports', () => {
+    const milestones = Array.from({length: 7}, (_, index) => ({
+      marker: String(index + 1),
+      title: `Step ${index + 1}`,
+    }));
+
+    expect(animatedTimelineContentSchema.safeParse({...timelineContent, milestones}).success).toBe(
+      false,
+    );
+  });
+});
+
+describe('architecture diagram content', () => {
+  it('accepts a minimal diagram', () => {
+    expect(architectureDiagramContentSchema.safeParse(diagramContent).success).toBe(true);
+  });
+
+  it('rejects an edge to an unknown node', () => {
+    const result = architectureDiagramContentSchema.safeParse({
+      ...diagramContent,
+      diagram: {...diagramContent.diagram, edges: [{from: 'manifest', to: 'ghost'}]},
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((issue) => issue.message.includes('unknown node'))).toBe(true);
+    }
+  });
+
+  it('rejects two nodes in the same grid cell', () => {
+    const result = architectureDiagramContentSchema.safeParse({
+      ...diagramContent,
+      diagram: {
+        nodes: [
+          {id: 'a', label: 'A', column: 0, row: 0},
+          {id: 'b', label: 'B', column: 0, row: 0},
+        ],
+        edges: [],
+      },
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((issue) => issue.message.includes('share column'))).toBe(true);
+    }
+  });
+
+  it('rejects self-referencing edges and duplicate node ids', () => {
+    const result = architectureDiagramContentSchema.safeParse({
+      ...diagramContent,
+      diagram: {
+        nodes: [
+          {id: 'a', label: 'A', column: 0, row: 0},
+          {id: 'a', label: 'A again', column: 1, row: 0},
+        ],
+        edges: [{from: 'a', to: 'a'}],
+      },
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((issue) => issue.message);
+      expect(messages.some((message) => message.includes('duplicate node id'))).toBe(true);
+      expect(messages.some((message) => message.includes('node to itself'))).toBe(true);
+    }
+  });
+
+  it('rejects nodes outside the supported grid', () => {
+    const result = architectureDiagramContentSchema.safeParse({
+      ...diagramContent,
+      diagram: {
+        nodes: [
+          {id: 'a', label: 'A', column: 4, row: 0},
+          {id: 'b', label: 'B', column: 0, row: 0},
+        ],
+        edges: [],
+      },
+    });
+
+    expect(result.success).toBe(false);
   });
 });
