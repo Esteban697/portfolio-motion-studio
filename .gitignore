@@ -18,3 +18,7 @@ Thumbs.db
 
 # Remotion browser cache
 .remotion-browser/
+
+# Personal source material — contains contact details. Kept local by default;
+# remove this line if you deliberately want the profile versioned.
+projects/*/profile.md
